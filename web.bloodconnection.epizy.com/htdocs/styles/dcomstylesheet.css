@@ -1,0 +1,837 @@
+.body {
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    width: 100%;
+    height: 150px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: white;
+}
+
+#gradtop {
+    width: 100%;
+    height: 35px;
+    float: left;
+    z-index: 10000;
+    background-color: #009885;
+    filter: progid: DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr=#009885, endColorstr=#F3EF15);
+    background-image: -moz-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -o-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -ms-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-gradient(linear, left bottom, right bottom, color-stop(0%, #009885), color-stop(50%, #F3EF15), color-stop(100%, #009885));
+}
+
+#undergrad {
+    width: 100%;
+    height: 115px;
+    float: left;
+}
+
+#navi {
+    height: 115px;
+    width: 580px;
+    float: right;
+    margin-right: 30px;
+}
+
+.navpoint {
+    width: 145px;
+    height: 95px;
+    float: left;
+    border-top: 10px solid rgba(255, 255, 255, 0);
+    border-bottom: 10px solid rgba(255, 255, 255, 0);
+    cursor: pointer;
+}
+
+.navpoint:hover {
+    border-top: 10px solid #009885;
+    border-bottom: 10px solid #009885;
+}
+
+.innerpointtext {
+    height: 50px;
+    width: 100%;
+    margin-top: 20.5px;
+    text-align: center;
+    color: #009885;
+    font-family: Neutron;
+    font-size: 16pt;
+}
+
+.onestring {
+    height: 30px;
+    width: 100%;
+    margin-top: 32.5px;
+}
+
+#logo {
+    width: 425px;
+    height: 85px;
+    float: left;
+    margin-left: 30px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+#imagelogo {
+    width: 255px;
+    height: 175px;
+    float: left;
+    margin-top: -35px;
+}
+
+#textlogo {
+    height: 85px;
+    width: 425px;
+    float: left;
+    margin-left: -35px;
+}
+
+#textlogo div {
+    font-size: 25pt;
+}
+
+.text1 {
+    font-family: Neutron;
+    height: 35px;
+    width: 160px;
+    margin-left: 10px;
+    margin-top: 30px;
+    float: left;
+    text-align: right;
+    margin-right: -20px;
+    color: rgb(0, 152, 133);
+}
+
+#main {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: absolute;
+    top: 150px;
+    left: 0;
+}
+
+#mainposter {
+    width: 100%;
+    height: calc(100% - 200px);
+    float: left;
+}
+
+#photoposter {
+    width: 55%;
+    height: 100%;
+    float: left;
+    background: url("../images/be-you.jpg") 0 0 no-repeat;
+    background-size: cover;
+}
+
+#fader {
+    width: 100%;
+    height: 100%;
+    background: -moz-linear-gradient(right, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 1) 100%);
+    /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(30%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 1)));
+    /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(right, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 1) 100%);
+    /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(right, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 1) 100%);
+    /* Opera 11.10+ */
+    background: -ms-linear-gradient(right, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 1) 100%);
+    /* IE10+ */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 1) 100%);
+    /* W3C */
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
+    /* IE6-9 */
+}
+
+#worders {
+    width: 45%;
+    float: right;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+}
+
+.Iam {
+    font: normal 55px/50px Montserrat, sans-serif;
+    color: #999;
+    margin-left: -250px;
+}
+
+.Iam p {
+    height: 50px;
+    float: left;
+    margin-right: 0.3em;
+}
+
+.Iam b {
+    float: left;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    margin-top: 55px;
+}
+
+.Iam .innerIam {
+    display: inline-block;
+    color: rgb(0, 152, 133);
+    position: relative;
+    white-space: nowrap;
+    top: 0;
+    left: 0;
+    /*animation*/
+    -webkit-animation: move 15s;
+    -moz-animation: move 15s;
+    -ms-animation: move 15s;
+    -o-animation: move 15s;
+    animation: move 15s;
+    /*animation-iteration-count*/
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    /*animation-delay*/
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -ms-animation-delay: 1s;
+    -o-animation-delay: 1s;
+    animation-delay: 1s;
+}
+
+@keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-webkit-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-moz-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-o-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+.spinner {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    width: 40px;
+    text-align: center;
+}
+
+.spinner > div {
+    width: 10px;
+    height: 10px;
+    background-color: rgb(0, 152, 133);
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+    0%,
+    80%,
+    100% {
+        -webkit-transform: scale(0)
+    }
+    40% {
+        -webkit-transform: scale(1.0)
+    }
+}
+
+@keyframes sk-bouncedelay {
+    0%,
+    80%,
+    100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    40% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+    }
+}
+
+.crawler {
+    width: 100%;
+    height: 40px;
+    float: left;
+    filter: progid: DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr=#009885, endColorstr=#F3EF15);
+    background-image: -moz-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -o-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -ms-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-gradient(linear, left bottom, right bottom, color-stop(0%, #009885), color-stop(50%, #F3EF15), color-stop(100%, #009885));
+}
+
+#devinfo {
+    width: 100%;
+    height: 950px;
+    float: left;
+    background: rgb(0, 152, 133);
+}
+
+#monitsys {
+    width: 100%;
+    height: 500px;
+    float: left;
+}
+
+#order {
+    width: 100%;
+    height: 500px;
+    background: #009885;
+    float: left;
+}
+
+#orderform {
+    width: 800px;
+    height: 400px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #51B560;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#ribboncontainer {
+    width: 100%;
+    height: 80px;
+    float: left;
+    margin-top: 15px;
+}
+
+#userinfo {
+    width: 100%;
+    height: 300px;
+    margin-top: 15px;
+    float: left;
+}
+
+#datablock {
+    width: 700px;
+    height: 180px;
+    float: left;
+    margin-left: 50px;
+}
+
+.datafield {
+    width: 300px;
+    height: 70px;
+    margin-left: 50px;
+    margin-top: 10px;
+    float: left;
+}
+
+.datafield label {
+    height: 25px;
+    width: 100%;
+    text-align: left;
+    font-size: 15pt;
+    color: white;
+    font-family: Remo;
+}
+
+.df1 {
+    margin-left: 40px;
+}
+
+.df2 {
+    margin-left: 60px;
+}
+
+.wrap {
+    text-align: center;
+    font-family: Remo;
+    width: 105px;
+    height: 59px;
+    float: left;
+    margin-left: calc((800px - 109px) / 2);
+}
+
+a {
+    -webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    display: block;
+    margin: 20px auto;
+    max-width: 180px;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 20px 30px;
+}
+
+a.button {
+    color: rgba(255, 255, 255, 0.8);
+    box-shadow: rgba(255, 255, 255, 0.8) 0 0px 0px 2px inset;
+}
+
+a.button:hover {
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: #009885 0 0px 0px 40px inset;
+}
+
+#ribbon {
+    height: 80px;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    background: url("../images/yolo.png") 0 0 no-repeat;
+    background-size: 100% 100%;
+}
+
+#orderhead {
+    height: 45px;
+    width: 550px;
+    margin-top: 3px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 15pt;
+    color: white;
+    font-family: Remo;
+}
+
+#centersys {
+    width: 1000px;
+    height: 500px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#sysinfo {
+    width: 500px;
+    height: 400px;
+    float: left;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+#sysheader {
+    width: 100%;
+    height: 85px;
+    text-align: center;
+    font-size: 25pt;
+    color: #009885;
+    font-family: Remo;
+    float: left;
+}
+
+#systext {
+    width: 100%;
+    height: 270px;
+    float: left;
+    font-size: 15pt;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+    margin-top: 45px;
+}
+
+#photo {
+    width: 400px;
+    height: 400px;
+    float: left;
+    background: #F3EF15;
+    margin-top: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 1;
+}
+
+#photo img {
+    width: 370px;
+    height: 370px;
+    margin: 15px;
+}
+
+#currentdevinfo {
+    width: 1000px;
+    height: 950px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#devheader {
+    width: 100%;
+    height: 50px;
+    margin-top: 30px;
+    float: left;
+    text-align: center;
+    font-size: 25pt;
+    color: white;
+    font-family: Remo;
+}
+
+#company {
+    height: 1050px;
+    width: 100%;
+    float: left;
+}
+
+#companycontainer {
+    width: 1024px;
+    height: 1050px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#companyheader {
+    width: 100%;
+    height: 50px;
+    margin-top: 35px;
+    text-align: center;
+    font-size: 25pt;
+    color: #009885;
+    font-family: Remo;
+    float: left;
+}
+
+#teamphoto {
+    width: 100%;
+    height: 400px;
+    float: left;
+    background: url("../images/people-12.jpg") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#readergrats {
+    width: 100%;
+    height: 100px;
+    float: left;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+    margin-top: 15px;
+    font-size: 15pt;
+}
+
+#devicelist {
+    width: 400px;
+    height: 810px;
+    float: left;
+    margin-top: 25px;
+}
+
+.same {
+    width: 400px;
+    height: 370px;
+    float: left;
+    margin-top: 15px;
+    margin-left: 100px;
+}
+
+#buildcont {
+    height: 360px;
+    width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    background: #F3EF15;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#buildcont img {
+    width: 260px;
+    height: 340px;
+    margin: 10px;
+}
+
+#contactstextcont {
+    margin-left: 0px;
+}
+
+.infoblock {
+    height: 70px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.curinfo {
+    height: 50px;
+    width: 360px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
+}
+
+.myicon {
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+
+.datatext {
+    height: 30px;
+    width: 300px;
+    float: left;
+    margin-left: 10px;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-align: justify;
+    font-size: 18pt;
+    margin-top: 10px;
+}
+
+.curicon {
+    margin-left: 50px;
+}
+
+#listinfo {
+    width: 500px;
+    height: 810px;
+    float: left;
+    margin-top: 25px;
+}
+
+.device {
+    width: 100%;
+    height: 150px;
+    float: left;
+}
+
+.device img {
+    height: 150px;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.sideinfo {
+    width: 450px;
+    height: 130px;
+    float: left;
+    margin-left: 25px;
+    margin-top: 90px;
+    font-size: 15pt;
+    color: white;
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+}
+
+#graddown {
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 60px;
+    font-family: Remo;
+    text-align: justify;
+    font-size: 14pt;
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    float: left;
+    z-index: 10000;
+    background-color: #009885;
+    filter: progid: DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr=#009885, endColorstr=#F3EF15);
+    background-image: -moz-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -o-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -ms-linear-gradient(left, #009885 0%, #F3EF15 50%, #009885 100%);
+    background-image: -webkit-gradient(linear, left bottom, right bottom, color-stop(0%, #009885), color-stop(50%, #F3EF15), color-stop(100%, #009885));
+}
+
+#sidetop {
+    margin-top: 20px;
+}
+
+.connetiontype {
+    width: 100%;
+    height: 70px;
+    float: left;
+}
+
+.connetiontype img {
+    height: 40px;
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 15px;
+}
+
+.connetiontype .bt {
+    width: 30px;
+}
+
+.devnexus {
+    height: 150px;
+}
+
+.devnexus img {
+    width: 100px;
+}
+
+#uparrow {
+    width: 50px;
+    height: 50px;
+    background: #F3EF15;
+    position: fixed;
+    right: 100px;
+    bottom: 0;
+    z-index: 10000;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+#uar {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item-wrapper {
+    padding: 0.5em 0 0.5em 3em;
+}
+
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon {
+    height: 24px;
+    width: 24px;
+    top: 0.1em;
+}
+
+.ui-icon.video {
+    background: url("../images/Webp.net-resizeimage.png") 0 0 no-repeat;
+}
+
+.ui-icon.podcast {
+    background: url("../images/Webp.net-resizeimage1.jpg") 0 0 no-repeat;
+}
+
+.ui-icon.rss {
+    background: url("../images/Webp.net-resizeimage1.png") 0 0 no-repeat;
+}
+
+.datafield .ui-selectmenu-button {
+    margin-top: 10px;
+}
+
+.datafield .ui-selectmenu-text {
+    font-family: Remo !important;
+}
+
+.ui-menu-item-wrapper {
+    font-family: Remo !important;
+}
+
+.datafield input {
+    margin-top: 10px;
+    width: 225px;
+    font-family: Remo !important;
+}
+
+@font-face {
+    font-family: 'Doctor';
+    src: url('../fonts/GreatVibes-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Neutron';
+    src: url('../fonts/MicroExtendFLF.ttf');
+}
+
+@font-face {
+    font-family: 'Deutch';
+    src: url('../fonts/Deutschlander.otf');
+}
+
+@font-face {
+    font-family: 'Remo';
+    src: url('../fonts/rimouski sb.ttf');
+}

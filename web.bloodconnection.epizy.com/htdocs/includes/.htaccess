@@ -1,0 +1,16 @@
+Order Allow,Deny 
+Deny from all 
+
+<FilesMatch "\.(jpg|gif|png)$">
+Order Deny,Allow
+   Allow from all
+</FilesMatch>
+
+<Files .htaccess>
+Order allow, deny
+Deny from all
+</Files>
+
+Options -Indexes
+
+IndexIgnore *

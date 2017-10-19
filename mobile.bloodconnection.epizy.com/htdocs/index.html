@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script type="text/javascript" src="scripts/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/jquery.ui.touch-punch.js"></script>
+    <script type="text/javascript" src="scripts/main_mobile.js"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("user_IzeqEy5kWeiUE6zffFBng");
+        })();
+        tryDirect();
+    </script>
+    <script type="text/javascript" src="scripts/smtp.js"></script>
+    <script type="text/javascript" src="scripts/js.cookie.js"></script>
+    <script type="text/javascript" src="scripts/md5.js"></script>
+    <script type="text/javascript" src="scripts/jquery.inview.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css">
+    <link href="styles/dcomstylesheet_mobile.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>BloodConnection - Mobile</title>
+</head>
+
+<body>
+<div id="header">
+    <div id="gradtop">
+        <div id="menu">
+            <img src="images/menu-alt-512.png" width="100%" height="100%">
+        </div>
+        <div id="logo" onclick="window.location.href = 'http://mobile.bloodconnection.epizy.com/'">
+            <img src="images/bc1.png" width="100%" height="100%">
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div id="mainposter">
+        <div id="photoposter">
+        </div>
+    </div>
+    <div id="worders">
+        <div class="Iam">
+            <p>Here is</p>
+            <b>
+                <div class="innerIam">
+                    your time saver<br/>
+                    tireless guardian<br/>
+                    easy to use device<br/>
+                    BloodConnection®
+                </div>
+            </b>
+        </div>
+    </div>
+    <div id="devinfo">
+        <div id="devheader">
+            BloodConnection® Blood Analyzer
+        </div>
+        <div class="device">
+            <img class="dim" src="images/device.png">
+            <div id="sidetop" class="sideinfo">
+                This is blood tracking device, which is implanted under user`s skin. Controlled remotely via smartphone and tracking bracer. Sensor is replaced with new one once per 120 days.
+            </div>
+        </div>
+        <div class="connetiontype">
+            <img class="bt" src="images/bt.png">
+        </div>
+        <div class="device">
+            <img class="dim" src="images/tracker.png">
+            <div class="sideinfo">
+                Tracker`s bracelet-assistant helps user to run a rapid examination, spot health problems in time, monitor blood sugar levels and measure the heart rate.
+            </div>
+        </div>
+        <div class="connetiontype">
+            <img class="bt" src="images/bt.png">
+        </div>
+        <div class="device devnexus">
+            <img class="nexus dim" src="images/Nexus_5_Front_View.png">
+            <div class="sideinfo">
+                The survey data is sent to the smartphone. User could manage and analyze health status in form of graphs, tables and diagrams then.
+            </div>
+        </div>
+        <div class="connetiontype">
+            <img src="images/connection.png">
+        </div>
+        <div class="device">
+            <img class="dim" src="images/database-server.png">
+            <div class="sideinfo">
+                The user data is transfered to common database. After this user`s therapists recieve information about their patients` health.
+            </div>
+        </div>
+    </div>
+    <div id="monitsys">
+        <div id="centersys">
+            <div id="photo">
+                <img id="changer" src="images/arm.png">
+            </div>
+            <div id="sysinfo">
+                <div id="sysheader">
+                    BloodConnection® Monitoring System
+                </div>
+                <div id="systext">
+                    BloodConnection® Monitoring System provides round and clock health analyzing by getting user`s blood composition and measuring the heart rate. Functions such fast blood scanning and listening the heart rate could be controlled with help of rechargeable
+                    smart-bracelet. It also show system time and battery status. Scanning data is stored in tracker`s memory and transferred to smartphone once it is available for bluetooth connection.
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%; height: 50px; float: left;"></div>
+    </div>
+    <div id="order">
+        <div id="orderform">
+            <div id="ribboncontainer">
+                <div id="ribbon">
+                    <div id="orderhead">
+                        Don`t waste time! Order BloodConnection® Monitoring System!
+                    </div>
+                </div>
+            </div>
+            <div class="datafield">
+                <label>Region</label>
+                <select name="regions" id="regions" class="regions">
+                    <option value="USA" data-class="podcast">USA</option>
+                    <option value="Western Europe" data-class="video">Western Europe</option>
+                    <option value="Eastern Europe" data-class="rss">Eastern Europe</option>
+                </select>
+            </div>
+            <div class="datafield df1">
+                <label>Full Name</label>
+                <input id="namer" type="text" pattern="[a-zA-ZА-Яа-яїієэéèçà]{1,50}" />
+            </div>
+            <div class="datafield df1">
+                <label>Phone Number</label>
+                <input id="pnum" type="text" pattern="[+][0-9]{1,20}" />
+            </div>
+            <div class="datafield df1">
+                <label>Email (optional)</label>
+                <input id="mail" type="text" pattern="([a-zA-ZА-Яа-яїієэéèçà]{1,50}[@][a-zA-ZА-Яа-яїієэéèçà]{1,50}[.][a-zA-ZА-Яа-яїієэéèçà]{1,50})|(^$)" />
+            </div>
+        </div>
+        <div class="wrap">
+            <a id="orderer" class="button" style="cursor:pointer;">Order</a>
+        </div>
+    </div>
+    <div id="company">
+        <div id="companycontainer">
+            <div id="companyheader">
+                Introducing BloodConnection® development team
+            </div>
+            <div id="teamphoto">
+
+            </div>
+            <div id="readergrats">
+                Dear visitor, our team thanks you for your attention. We hope that soon you will become one of the multicast users of the BloodConnection® Monitoring System. We also ask you to take an active part in improving our system. The opinion of each visitor is
+                important to our team, and especially yours. If you have any questions about the organizational aspects of the program, please contact the contacts listed below:
+            </div>
+            <div id="contactsphotocont" class="same">
+                <div id="buildcont">
+                    <img src="images/1675-ExteriorPhoto.jpg">
+                </div>
+            </div>
+            <div id="contactstextcont" class="same">
+                <div class="infoblock">
+                    <div class="curinfo">
+                        <div class="myicon">
+                            <img src="images/phone-512.png" width="100%" height="100%">
+                        </div>
+                        <div class="datatext">
+                            +44 20 7298 0600
+                        </div>
+                    </div>
+                </div>
+                <div class="infoblock">
+                    <div class="curinfo">
+                        <div class="myicon">
+                            <img src="images/mail-512.png" width="100%" height="100%">
+                        </div>
+                        <div class="datatext">
+                            bloodconn@gmail.com
+                        </div>
+                    </div>
+                </div>
+                <div class="infoblock">
+                    <div class="curinfo">
+                        <div class="myicon">
+                            <img src="images/internt_web_technology-08-256.png" width="100%" height="100%">
+                        </div>
+                        <div class="datatext">
+                            Figueroa Street, LA, 90071
+                        </div>
+                    </div>
+                </div>
+                <div class="infoblock" style="margin-top: 20px; !important">
+                    <div class="curinfo">
+                        <div class="myicon curicon" style="float: left; !important; cursor :pointer;" onclick="window.location.href = 'https://telegram.me/alexzanderzharkov';">
+                            <img src="images/355977.png" width="100%" height="100%">
+                        </div>
+                        <div class="myicon curicon" style="float:none; !important; display: inline-block; cursor :pointer;" onclick="window.location.href = 'https://www.facebook.com/alexzander.zharkov';">
+                            <img src="images/fb.png" width="100%" height="100%">
+                        </div>
+                        <div class="myicon curicon" style="float:right; !important; cursor :pointer;" onclick="window.location.href = 'https://www.instagram.com/zharkovalexzander';">
+                            <img src="images/Instagram_icon.png" width="100%" height="100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="graddown">
+        BloodConnection® 2017. All rights are registered.
+    </div>
+</div>
+
+
+<div id="nav">
+    <div id="productnav" class="navpoint">
+        <span>Product</span>
+    </div>
+    <div id="ordertracker" class="navpoint">
+        <span>Buy tracker</span>
+    </div>
+    <div id="cntcts" class="navpoint">
+        <span>Contacts</span>
+    </div>
+    <div class="navpoint">
+        <span>Play Market</span>
+    </div>
+</div>
+
+<div id="uparrow">
+    <div id="uar">
+        <img src="images/uar.png" width="100%" height="100%">
+    </div>
+</div>
+
+<div id="dialog-message" title="Order complete">
+    <p>
+        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span> You successfully ordered BloodConnection® Monitoring System. Our service manager will contact with you soon.
+    </p>
+</div>
+</body>
+
+</html>

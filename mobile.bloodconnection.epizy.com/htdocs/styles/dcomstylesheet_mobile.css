@@ -1,0 +1,710 @@
+body {
+    max-width: 465px;
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: white;
+}
+
+#gradtop {
+    width: 100%;
+    height: 80px;
+    float: left;
+    z-index: 10000;
+    background-color: #009885;
+}
+
+#logo {
+    width: 200px;
+    height: 60px;
+    cursor: pointer;
+    margin: 10px 35px;
+    float: right;
+}
+
+#menu {
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#main {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    background: #009885;
+}
+
+#uparrow {
+    width: 50px;
+    height: 50px;
+    background: #F3EF15;
+    position: fixed;
+    left: calc(50% - 25px);
+    bottom: 0;
+    z-index: 9998;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+#uar {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+#nav {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    top: 80px;
+    left: 0;
+    visibility: hidden;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.navpoint {
+    height: 8%;
+    width: 74%;
+    background: #009885;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10001;
+    display: table;
+    text-align: center;
+    color: white;
+    font-family: Remo;
+    font-size: 20pt;
+}
+
+.navpoint:hover {
+    background: #F3EF15;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.navpoint span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.innerpointtext {
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    color: #009885;
+    font-family: Neutron;
+    font-size: 20pt;
+    margin-top: 20px;
+}
+
+.onestring {
+    height: 30px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#mainposter {
+    width: 100%;
+    height: calc(100% - 200px);
+    float: left;
+    background: white;
+}
+
+#photoposter {
+    width: 100%;
+    height: 100%;
+    float: left;
+    background: url("../images/be-you.jpg") 0 0 no-repeat;
+    background-size: cover;
+}
+
+#worders {
+    width: 100%;
+    float: left;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    text-align: center;
+    background: white;
+}
+
+.Iam {
+    font: normal 20px/50px Montserrat, sans-serif;
+    color: #999;
+    margin-left: calc(50% - 125px);
+}
+
+.Iam p {
+    height: 50px;
+    float: left;
+    margin-right: 0.3em;
+}
+
+.Iam b {
+    float: left;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    margin-top: 20px;
+}
+
+.Iam .innerIam {
+    display: inline-block;
+    color: rgb(0, 152, 133);
+    position: relative;
+    white-space: nowrap;
+    top: 0;
+    left: 0;
+    /*animation*/
+    -webkit-animation: move 15s;
+    -moz-animation: move 15s;
+    -ms-animation: move 15s;
+    -o-animation: move 15s;
+    animation: move 15s;
+    /*animation-iteration-count*/
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    /*animation-delay*/
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -ms-animation-delay: 1s;
+    -o-animation-delay: 1s;
+    animation-delay: 1s;
+}
+
+@keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-webkit-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-moz-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@-o-keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+@keyframes move {
+    0% {
+        top: 0px;
+    }
+    25% {
+        top: -50px;
+    }
+    50% {
+        top: -100px;
+    }
+    75% {
+        top: -150px;
+    }
+}
+
+#devinfo {
+    width: 100%;
+    height: 1000px;
+    float: left;
+    background: rgb(0, 152, 133);
+}
+
+#devheader {
+    width: 100%;
+    height: 100px;
+    margin-top: 30px;
+    float: left;
+    text-align: center;
+    font-size: 20pt;
+    color: white;
+    font-family: Remo;
+}
+
+.device {
+    width: 100%;
+    height: 150px;
+    float: left;
+}
+
+.device img {
+    height: 150px;
+    width: 150px;
+    left: calc(50% - 75px);
+    display: block;
+    position: absolute;
+    opacity: 1;
+    visibility: visible;
+}
+
+.connetiontype {
+    width: 100%;
+    height: 70px;
+    float: left;
+}
+
+.connetiontype img {
+    height: 40px;
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 15px;
+}
+
+.connetiontype .bt {
+    width: 30px;
+}
+
+.devnexus {
+    height: 150px;
+}
+
+.devnexus img {
+    width: 100px;
+    left: calc(50% - 50px);
+}
+
+.sideinfo {
+    width: 80%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 12pt;
+    color: white;
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#monitsys {
+    width: 100%;
+    height: auto;
+    float: left;
+    background: white;
+}
+
+#photo {
+    width: 300px;
+    height: 300px;
+    margin-left: calc(50% - 150px);
+    float: left;
+    background: #F3EF15;
+    margin-top: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 1;
+}
+
+#photo img {
+    width: 270px;
+    height: 270px;
+    margin: 15px;
+}
+
+#centersys {
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+#sysheader {
+    width: 100%;
+    height: 85px;
+    text-align: center;
+    font-size: 20pt;
+    color: #009885;
+    font-family: Remo;
+    float: left;
+    margin-top: 20px;
+}
+
+#systext {
+    width: 80%;
+    float: left;
+    font-size: 12pt;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+    margin-left: calc(10%);
+}
+
+#order {
+    width: 100%;
+    height: 575px;
+    background: #009885;
+    float: left;
+}
+
+#orderform {
+    width: 332px;
+    height: 400px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #51B560;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#ribboncontainer {
+    width: 100%;
+    height: 50px;
+    float: left;
+    margin-top: 15px;
+}
+
+#ribbon {
+    height: 50px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background: url("../images/yolo.png") 0 0 no-repeat;
+    background-size: 100% 100%;
+}
+
+#orderhead {
+    height: 100%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 10pt;
+    color: white;
+    font-family: Remo;
+}
+
+.datafield {
+    width: 90%;
+    height: 70px;
+    margin-left: 5%;
+    margin-top: 10px;
+    float: left;
+}
+
+.datafield input {
+    width: 85% !important;
+}
+
+.ui-selectmenu-button-closed {
+    width: 85% !important;
+}
+
+.datafield label {
+    height: 25px;
+    width: 100%;
+    text-align: left;
+    font-size: 15pt;
+    color: white;
+    font-family: Remo;
+}
+
+.wrap {
+    text-align: center;
+    font-family: Remo;
+    width: 110px;
+    height: 59px;
+    float: left;
+    margin-left: calc(50% - 55px);
+}
+
+a {
+    -webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    display: block;
+    margin: 20px auto;
+    max-width: 180px;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 20px 30px;
+}
+
+#company {
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+#companycontainer {
+    width: 80%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#companyheader {
+    width: 100%;
+    height: auto;
+    margin-top: 35px;
+    text-align: center;
+    font-size: 20pt;
+    color: #009885;
+    font-family: Remo;
+    float: left;
+}
+
+#teamphoto {
+    width: 288px;
+    height: 120px;
+    display: inline-block;
+    background: url("../images/people-12.jpg") no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#readergrats {
+    width: 100%;
+    height: auto;
+    float: left;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-indent: 1.5em;
+    text-align: justify;
+    margin-top: 15px;
+    font-size: 15pt;
+}
+
+a.button {
+    color: rgba(255, 255, 255, 0.8);
+    box-shadow: rgba(255, 255, 255, 0.8) 0 0px 0px 2px inset;
+}
+
+a.button:hover {
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: #009885 0 0px 0px 40px inset;
+}
+
+.same {
+    width: 100%;
+    height: 370px;
+    float: left;
+    margin-top: 15px;
+}
+
+#buildcont {
+    height: 360px;
+    width: 288px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    background: #F3EF15;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#buildcont img {
+    width: calc(100% - 20px);
+    height: 340px;
+    margin: 10px;
+}
+
+#contactstextcont {
+    height: 200px;
+!important;
+}
+
+.infoblock {
+    height: 30px;
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.curinfo {
+    height: 30px;
+    width: 100%;
+}
+
+.myicon {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+.datatext {
+    height: 30px;
+    width: calc(100% - 40px);
+    float: right;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: Remo;
+    text-align: justify;
+    font-size: 12pt;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+#graddown {
+    color: white;
+    line-height: 60px;
+    font-family: Remo;
+    text-align: justify;
+    font-size: 10pt;
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    float: left;
+    z-index: 10000;
+    background-color: #009885;
+}
+
+@-webkit-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+@-moz-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -moz-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -moz-transform: translateY(0%);
+    }
+}
+@-ms-keyframes moveFromBottom {
+    from {
+        opacity: 0;
+        -ms-transform: translateY(200%);
+    }
+    to {
+        opacity: 1;
+        -ms-transform: translateY(0%);
+    }
+}
+
+@-webkit-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+@-moz-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -moz-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -moz-transform: translateY(0%);
+    }
+}
+@-ms-keyframes moveFromTop {
+    from {
+        opacity: 0;
+        -ms-transform: translateY(-200%);
+    }
+    to {
+        opacity: 1;
+        -ms-transform: translateY(0%);
+    }
+}
+
+/**/
+
+@font-face {
+    font-family: 'Doctor';
+    src: url('../fonts/GreatVibes-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Neutron';
+    src: url('../fonts/MicroExtendFLF.ttf');
+}
+
+@font-face {
+    font-family: 'Deutch';
+    src: url('../fonts/Deutschlander.otf');
+}
+
+@font-face {
+    font-family: 'Remo';
+    src: url('../fonts/rimouski sb.ttf');
+}
