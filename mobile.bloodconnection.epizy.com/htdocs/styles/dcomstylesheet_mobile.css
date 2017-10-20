@@ -150,7 +150,8 @@ body {
 .Iam {
     font: normal 20px/50px Montserrat, sans-serif;
     color: #999;
-    margin-left: calc(50% - 125px);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .Iam p {
@@ -168,6 +169,7 @@ body {
 }
 
 .Iam .innerIam {
+    text-align: left;
     display: inline-block;
     color: rgb(0, 152, 133);
     position: relative;
@@ -278,7 +280,7 @@ body {
 
 #devheader {
     width: 100%;
-    height: 100px;
+    height: auto;
     margin-top: 30px;
     float: left;
     text-align: center;

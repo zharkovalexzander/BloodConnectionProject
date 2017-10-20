@@ -15,7 +15,8 @@ var langs = [
     { lang: "English", path: "../locals/en.xml" },
     { lang: "Russian", path: "../locals/ru.xml" },
     { lang: "French",  path: "../locals/fr.xml" },
-    { lang: "Deutsch", path: "../locals/de.xml" }
+    { lang: "Deutsch", path: "../locals/de.xml" },
+    { lang: "German",  path: "../locals/de.xml" }
 ];
 $(document).ready(function() {
 
@@ -289,7 +290,7 @@ function detectLang() {
 }
 
 function changeLang(lan) {
-    var lagua = lan;
+    var lagua = "German";
     console.log(lagua);
     if(lagua == "Russian") {
         var newStyle = document.createElement('style');

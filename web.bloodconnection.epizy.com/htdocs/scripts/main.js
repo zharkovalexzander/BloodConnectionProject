@@ -14,7 +14,8 @@ var langs = [
     { lang: "English", path: "../locals/en.xml" },
     { lang: "Russian", path: "../locals/ru.xml" },
     { lang: "French",  path: "../locals/fr.xml" },
-    { lang: "Deutsch", path: "../locals/de.xml" }
+    { lang: "Deutsch", path: "../locals/de.xml" },
+    { lang: "German",  path: "../locals/de.xml" }
 ];
 $(document).ready(function() {
 
