@@ -11,8 +11,15 @@ var mail = {
     from_region: "",
     from_phone: ""
 };
-
+var langs = [
+    { lang: "English", path: "../locals/en.xml" },
+    { lang: "Russian", path: "../locals/ru.xml" },
+    { lang: "French",  path: "../locals/fr.xml" },
+    { lang: "Deutsch", path: "../locals/de.xml" }
+];
 $(document).ready(function() {
+
+    detectLang();
 
     $(".sideinfo").disableSelection();
 
@@ -258,4 +265,67 @@ function tryDirect() {
     if(!(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
         window.location.replace("http://web.bloodconnection.epizy.com/");
     }
+}
+
+function stringifyXML(url) {
+    var xml_string = null;
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "text",
+        async: false,
+        success: function (xml) {
+            xml_string = xml;
+        },
+        error: function (xml) { }
+    });
+    return xml_string;
+}
+
+function detectLang() {
+    $.browserLanguage(function( language , acceptHeader ){
+        changeLang(language);
+    });
+}
+
+function changeLang(lan) {
+    var lagua = lan;
+    console.log(lagua);
+    if(lagua == "Russian") {
+        var newStyle = document.createElement('style');
+        newStyle.appendChild(document.createTextNode("\
+            @font-face {\
+                font-family: 'Rus';\
+                src: url('fonts/10771.ttf');\
+            }\
+            "));
+        document.head.appendChild(newStyle);
+        $('body').find('*').each(function () {
+            this.style.setProperty('font-family', 'Rus', '');
+        });
+    }
+    var path = langs.selWhereLangEq(lagua);
+    var xml = stringifyXML(path);
+    var x2js = new X2JS();
+    var jsonObj = x2js.xml_str2json(xml);
+    manageLanguage(jsonObj);
+}
+
+function manageLanguage(obj) {
+    var elements = obj.root;
+    var localize = Object.keys(elements);
+    for(var i = 0; i < localize.length; ++i) {
+        var txt = elements[localize[i]];
+        if(txt.indexOf("~") != -1) {
+            txt = txt.replace(/~/g,"</br>");
+        }
+        $("#" + localize[i]).html(txt);
+    }
+}
+
+Array.prototype.selWhereLangEq = function (lang) {
+    for(var i = 0; i < langs.length; ++i) {
+        if(langs[i].lang == lang) return langs[i].path;
+    }
+    return null;
 }
