@@ -7,26 +7,25 @@
     <script type="text/javascript" src="scripts/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="scripts/jquery-ui.js"></script>
     <script type="text/javascript" src="scripts/jquery.ui.touch-punch.js"></script>
-    <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/jquery.browserLanguage.js"></script>
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() {
-            emailjs.init("user_IzeqEy5kWeiUE6zffFBng");
-        })();
-        tryDirect();
-    </script>
     <script type="text/javascript" src="scripts/smtp.js"></script>
     <script type="text/javascript" src="scripts/js.cookie.js"></script>
     <script type="text/javascript" src="scripts/md5.js"></script>
     <script type="text/javascript" src="scripts/redirection-mobile.js"></script>
-    <script>
+    <script type="text/javascript" src="scripts/xml2json.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript">
         SA.redirection_mobile({
             redirection_param: "mobile_redirection",
             mobile_url: "http://mobile.bloodconnection.epizy.com/",
             cookie_hours: "2",
             tablet_redirection: true
         });
-
+        (function() {
+            emailjs.init("user_IzeqEy5kWeiUE6zffFBng");
+        })();
+        //tryDirect();
     </script>
 
     <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css">
@@ -52,17 +51,17 @@
         </div>
         <div id="navi">
             <div id="productnav" class="navpoint">
-                <div class="innerpointtext onestring">
+                <div class="innerpointtext onestring" id="loc1">
                     Product
                 </div>
             </div>
             <div id="ordertracker" class="navpoint">
-                <div class="innerpointtext">
+                <div class="innerpointtext" id="loc2">
                     Buy tracker
                 </div>
             </div>
             <div id="cntcts" class="navpoint">
-                <div class="innerpointtext onestring">
+                <div class="innerpointtext onestring" id="loc3">
                     Contacts
                 </div>
             </div>
@@ -81,9 +80,9 @@
         </div>
         <div id="worders">
             <div class="Iam">
-                <p>Here is</p>
+                <p id="loc4">Here is</p>
                 <b>
-                    <div class="innerIam">
+                    <div id="loc5" class="innerIam">
                         your time saver<br/>
                         tireless guardian<br/>
                         easy to use device<br/>
@@ -132,13 +131,13 @@
                 <div id="sidetop" class="sideinfo">
                     This is blood tracking device, which is implanted under user`s skin. Controlled remotely via smartphone and tracking bracer. Sensor is replaced with new one once per 120 days.
                 </div>
-                <div class="sideinfo">
+                <div id="loc6" class="sideinfo">
                     Tracker`s bracelet-assistant helps user to run a rapid examination, spot health problems in time, monitor blood sugar levels and measure the heart rate.
                 </div>
-                <div class="sideinfo">
+                <div id="loc7" class="sideinfo">
                     The survey data is sent to the smartphone. User could manage and analyze health status in form of graphs, tables and diagrams then.
                 </div>
-                <div class="sideinfo">
+                <div id="loc8" class="sideinfo">
                     The user data is transfered to common database. After this user`s therapists recieve information about their patients` health.
                 </div>
             </div>
@@ -185,7 +184,7 @@
                 <div id="userinfo">
                     <div id="datablock">
                         <div class="datafield df1">
-                            <label>Region</label>
+                            <label id="loc9">Region</label>
                             <select name="regions" id="regions" class="regions">
                                 <option value="USA" data-class="podcast">USA</option>
                                 <option value="Western Europe" data-class="video">Western Europe</option>
@@ -193,20 +192,20 @@
                             </select>
                         </div>
                         <div class="datafield df2">
-                            <label>Full Name</label>
+                            <label id="loc11">Full Name</label>
                             <input id="namer" type="text" pattern="[a-zA-ZА-Яа-яїієэéèçà]{1,50}" />
                         </div>
                         <div class="datafield df1">
-                            <label>Phone Number</label>
+                            <label id="loc10">Phone Number</label>
                             <input id="pnum" type="text" pattern="[+][0-9]{1,20}" />
                         </div>
                         <div class="datafield df2">
-                            <label>Email (optional)</label>
+                            <label id="loc12">Email (optional)</label>
                             <input id="mail" type="text" pattern="([a-zA-ZА-Яа-яїієэéèçà]{1,50}[@][a-zA-ZА-Яа-яїієэéèçà]{1,50}[.][a-zA-ZА-Яа-яїієэéèçà]{1,50})|(^$)" />
                         </div>
                     </div>
                     <div class="wrap">
-                        <a id="orderer" class="button" style="cursor:pointer;">Order</a>
+                        <a id="orderer" class="button" style="cursor:pointer; text-align: center;">Order</a>
                     </div>
                 </div>
             </div>
