@@ -11,22 +11,62 @@ var mail = {
     from_region: "",
     from_phone: ""
 };
-var langs = [
-    { lang: "English", path: "../locals/en.xml" },
-    { lang: "Russian", path: "../locals/ru.xml" },
-    { lang: "French",  path: "../locals/fr.xml" },
-    { lang: "Deutsch", path: "../locals/de.xml" },
-    { lang: "German",  path: "../locals/de.xml" }
+var langs = [{
+    lang: "English",
+    path: "../locals/en.xml"
+}, {
+    lang: "Russian",
+    path: "../locals/ru.xml"
+}, {
+    lang: "French",
+    path: "../locals/fr.xml"
+}, {
+    lang: "Deutsch",
+    path: "../locals/de.xml"
+}, {
+    lang: "German",
+    path: "../locals/de.xml"
+}];
+var lngPos = [
+    "English",
+    "German",
+    "French",
+    "Russian"
 ];
+var langIsShown = false;
 $(document).ready(function() {
 
-    detectLang();
+    detectLang(0);
 
     $(".sideinfo").disableSelection();
 
     $(window).trigger('scroll');
 
     showMotiv();
+
+    $(".country").click(function() {
+        if (langIsShown) {
+            if (!($(this).is($('#lang').children(".country").first()))) {
+                detectLang($(this).index());
+                swapElement($(this), $('#lang').children(".country").first());
+            }
+            $("#lang").animate({
+                height: '30px'
+            }, 400, function() {
+                langIsShown = false;
+                $("#menu").trigger('click');
+            });
+        } else {
+            $("#lang").animate({
+                height: '120px'
+            }, 400, function() {
+                langIsShown = true;
+            });
+        }
+        $("#lang").children().each(function() {
+            $(this).css('font-family', 'Rus');
+        });
+    });
 
     $("#menu").click(function() {
         if (menuStatus == false) {
@@ -126,26 +166,26 @@ $(document).ready(function() {
         }, "slow");
     })
 
-     $("#productnav").click(function() {
-         $("#menu").trigger("click");
-         $("html, body").animate({
-         scrollTop: $('#devinfo').offset().top - 150
-         }, "slow");
-     });
+    $("#productnav").click(function() {
+        $("#menu").trigger("click");
+        $("html, body").animate({
+            scrollTop: $('#devinfo').offset().top - 150
+        }, "slow");
+    });
 
-     $("#ordertracker").click(function() {
-         $("#menu").trigger("click");
-         $("html, body").animate({
-         scrollTop: $('#order').offset().top - 150
-         }, "slow");
-     });
+    $("#ordertracker").click(function() {
+        $("#menu").trigger("click");
+        $("html, body").animate({
+            scrollTop: $('#order').offset().top - 150
+        }, "slow");
+    });
 
-     $("#cntcts").click(function() {
-         $("#menu").trigger("click");
-         $("html, body").animate({
-         scrollTop: $('#company').offset().top - 150
-         }, "slow");
-     });
+    $("#cntcts").click(function() {
+        $("#menu").trigger("click");
+        $("html, body").animate({
+            scrollTop: $('#company').offset().top - 150
+        }, "slow");
+    });
 
     setInterval(function() {
         $("#photo").animate({
@@ -263,7 +303,7 @@ function gotIt(thise) {
 }
 
 function tryDirect() {
-    if(!(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+    if (!(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
         window.location.replace("http://web.bloodconnection.epizy.com/");
     }
 }
@@ -275,24 +315,24 @@ function stringifyXML(url) {
         url: url,
         dataType: "text",
         async: false,
-        success: function (xml) {
+        success: function(xml) {
             xml_string = xml;
         },
-        error: function (xml) { }
+        error: function(xml) {}
     });
     return xml_string;
 }
 
-function detectLang() {
-    $.browserLanguage(function( language , acceptHeader ){
-        changeLang(language);
+function detectLang(pos) {
+    $.browserLanguage(function(language, acceptHeader) {
+        defineLanguage(language, pos);
     });
 }
 
 function changeLang(lan) {
-    var lagua = "German";
+    var lagua = lan;
     console.log(lagua);
-    if(lagua == "Russian") {
+    if (lagua == "Russian") {
         var newStyle = document.createElement('style');
         newStyle.appendChild(document.createTextNode("\
             @font-face {\
@@ -301,7 +341,7 @@ function changeLang(lan) {
             }\
             "));
         document.head.appendChild(newStyle);
-        $('body').find('*').each(function () {
+        $('body').find('*').each(function() {
             this.style.setProperty('font-family', 'Rus', '');
         });
     }
@@ -315,18 +355,72 @@ function changeLang(lan) {
 function manageLanguage(obj) {
     var elements = obj.root;
     var localize = Object.keys(elements);
-    for(var i = 0; i < localize.length; ++i) {
+    for (var i = 0; i < localize.length; ++i) {
         var txt = elements[localize[i]];
-        if(txt.indexOf("~") != -1) {
-            txt = txt.replace(/~/g,"</br>");
+        if (txt.indexOf("~") != -1) {
+            txt = txt.replace(/~/g, "</br>");
         }
         $("#" + localize[i]).html(txt);
     }
 }
 
-Array.prototype.selWhereLangEq = function (lang) {
-    for(var i = 0; i < langs.length; ++i) {
-        if(langs[i].lang == lang) return langs[i].path;
+Array.prototype.selWhereLangEq = function(lang) {
+    for (var i = 0; i < langs.length; ++i) {
+        if (langs[i].lang == lang) return langs[i].path;
     }
     return null;
+}
+
+function swapElement(a, b) {
+    var aNext = $('<div>').insertAfter(a);
+    a.insertAfter(b);
+    b.insertBefore(aNext);
+    aNext.remove();
+}
+
+function sw(lan) {
+    for (var i = 1; i < lngPos.length; ++i) {
+        if (lngPos[i] == lan) {
+            var tmp = lngPos[0];
+            lngPos[0] = lngPos[i];
+            lngPos[i] = tmp;
+            return i;
+        }
+    }
+}
+
+function defineLanguage(blang, position) {
+    var cook = Cookies.get('lang');
+    if (cook === undefined) {
+        swapElement($("#lang").children().eq(sw(blang)), $('#lang').children(".country").first());
+        changeLang(lngPos[0]);
+        Cookies.set('lang', lngPos[0], {
+            path: ''
+        });
+    } else {
+        swapElement($("#lang").children().eq(sw(cook)), $('#lang').children(".country").first());
+        var newStyle = document.createElement('style');
+        newStyle.appendChild(document.createTextNode("\
+            @font-face {\
+                font-family: 'Rus';\
+                src: url('fonts/10771.ttf');\
+            }\
+            "));
+        document.head.appendChild(newStyle);
+        $('body').find('*').each(function() {
+            this.style.setProperty('font-family', 'Rus', '');
+        });
+        if (cook != lngPos[position]) {
+            var tmp = lngPos[0];
+            lngPos[0] = lngPos[position];
+            lngPos[position] = tmp;
+        }
+        Cookies.remove('lang', {
+            path: ''
+        });
+        changeLang(lngPos[0]);
+        Cookies.set('lang', lngPos[0], {
+            path: ''
+        });
+    }
 }
