@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/terminalColor"
+        tools:context="com.bloodconnection.bluetoothconnection.MainActivity">
+
+    <TextView
+        android:id="@+id/topItem"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="35dp"
+        android:fontFamily="sans-serif-condensed"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Blood Terminal"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="24sp"
+        tools:text="Blood Terminal" />
+
+    <ScrollView
+        android:id="@+id/scrollerId"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/topItem"
+        android:layout_marginBottom="29dp"
+        android:layout_marginTop="29dp"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/innerTerminal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/scrollerId"
+            android:fontFamily="monospace"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp"
+            android:scrollbars = "vertical"
+            android:gravity="bottom"/>
+    </ScrollView>
+</RelativeLayout>
