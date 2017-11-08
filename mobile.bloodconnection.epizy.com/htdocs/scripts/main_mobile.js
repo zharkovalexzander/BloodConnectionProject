@@ -26,12 +26,16 @@ var langs = [{
 }, {
     lang: "German",
     path: "../locals/de.xml"
+}, {
+    lang: "Ukrainian",
+    path: "../locals/uk.xml"
 }];
 var lngPos = [
     "English",
     "German",
     "French",
-    "Russian"
+    "Russian",
+    "Ukrainian"
 ];
 var langIsShown = false;
 $(document).ready(function() {
@@ -58,7 +62,7 @@ $(document).ready(function() {
             });
         } else {
             $("#lang").animate({
-                height: '120px'
+                height: '150px'
             }, 400, function() {
                 langIsShown = true;
             });

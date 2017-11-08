@@ -1,8 +1,9 @@
 package add.bloodconnection.common;
 
 import java.io.Serializable;
-import java.util.*;
-import java.text.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Alexzander on 23.10.2017.

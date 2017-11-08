@@ -25,12 +25,16 @@ var langs = [{
 }, {
     lang: "German",
     path: "../locals/de.xml"
+}, {
+    lang: "Ukrainian",
+    path: "../locals/uk.xml"
 }];
 var lngPos = [
     "English",
     "German",
     "French",
-    "Russian"
+    "Russian",
+    "Ukrainian"
 ];
 var langIsShown = false;
 $(document).ready(function() {
@@ -53,7 +57,7 @@ $(document).ready(function() {
             langIsShown = false;
         } else {
             $("#lang").animate({
-                height: '120px'
+                height: '150px'
             }, 400);
             langIsShown = true;
         }
@@ -232,6 +236,7 @@ function stringifyXML(url) {
         dataType: "text",
         async: false,
         success: function(xml) {
+            console.log(xml);
             xml_string = xml;
         },
         error: function(xml) {}

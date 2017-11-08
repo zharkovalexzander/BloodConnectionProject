@@ -7,45 +7,108 @@
         android:background="@color/terminalColor"
         tools:context="com.bloodconnection.bluetoothconnection.MainActivity">
 
-    <TextView
-        android:id="@+id/topItem"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl1"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="35dp"
-        android:fontFamily="sans-serif-condensed"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="Blood Terminal"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_green_light"
-        android:textSize="24sp"
-        tools:text="Blood Terminal" />
-
-    <ScrollView
-        android:id="@+id/scrollerId"
-        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/topItem"
-        android:layout_marginBottom="29dp"
-        android:layout_marginTop="29dp"
-        android:fillViewport="true">
+        android:background="@color/terminalColor"
+        android:visibility="visible">
 
         <TextView
-            android:id="@+id/innerTerminal"
+            android:id="@+id/topItem"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="35dp"
+            android:clickable="true"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Blood Terminal"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="24sp"
+            tools:text="Blood Terminal" />
+
+        <ScrollView
+            android:id="@+id/scrollerId"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/topItem"
+            android:layout_marginBottom="29dp"
+            android:layout_marginTop="89dp"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/innerTerminal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/scrollerId"
+                android:fontFamily="monospace"
+                android:gravity="bottom"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:scrollbars="vertical"
+                android:textSize="18sp" />
+        </ScrollView>
+    </FrameLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:background="@color/terminalSecondary"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/topItemScanner"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="35dp"
+            android:clickable="true"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Blood Characteristics"
+            android:textAlignment="center"
+            android:textColor="@color/secondaryHelper"
+            android:textSize="24sp"
+            tools:text="Blood Characteristics" />
+
+        <ScrollView
+            android:id="@+id/scrollerIdScanner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/scrollerId"
-            android:fontFamily="monospace"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:textSize="18sp"
-            android:scrollbars = "vertical"
-            android:gravity="bottom"/>
-    </ScrollView>
+            android:layout_below="@+id/topItem"
+            android:layout_marginBottom="29dp"
+            android:layout_marginTop="89dp"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/innerTerminalScanner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/scrollerId"
+                android:fontFamily="monospace"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:scrollbars="vertical"
+                android:textSize="18sp" />
+        </ScrollView>
+    </FrameLayout>
+
 </RelativeLayout>

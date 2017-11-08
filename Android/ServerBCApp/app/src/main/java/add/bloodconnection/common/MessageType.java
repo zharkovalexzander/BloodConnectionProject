@@ -5,5 +5,5 @@ package add.bloodconnection.common;
  */
 
 public enum MessageType {
-    Connection, Query, Response, Error;
+    Connection, Query, Response, Error, Bracelet, Ery, Leu, Col, Glu, Hem, Reason
 }

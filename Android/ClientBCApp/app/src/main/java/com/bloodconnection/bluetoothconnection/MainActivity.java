@@ -32,6 +32,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Date;
@@ -145,10 +147,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
-
-                    String writeMessage = new String(writeBuf);
-                    commandsToDevice.add(writeMessage);
+                    TransferMessage yourObject = SerializationUtils.deserialize((byte[]) msg.obj);
+                    commandsToDevice.add(yourObject.toString());
                     chatAdapter.notifyDataSetChanged();
                     break;
                 case MESSAGE_READ:
@@ -283,13 +283,20 @@ public class MainActivity extends AppCompatActivity {
     private void findViewsByIds() {
         status = (TextView) findViewById(R.id.status);
         btnConnect = (Button) findViewById(R.id.btn_connect);
-        View btn_cnct_brac = findViewById(R.id.btn_on_bracelet);
-        View btn_msg = findViewById(R.id.btn_send_msg_to_scan);
+        Button btn_cnct_brac = (Button) findViewById(R.id.btn_on_bracelet);
+		Button scan = (Button) findViewById(R.id.btn_send_msg_to_scan);
 
-        btn_msg.setOnClickListener(new View.OnClickListener() {
+        btn_cnct_brac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage(new Integer(0x0f).toString());
+                sendMessage(new CommandTransfer("D3:44:ED:E1:1F:9A", new Date(), Response.BRACELET_MAC));
+            }
+        });
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage(new CommandTransfer("Vibrate", new Date(), Response.BRACELET_VIBRATION));
             }
         });
     }
@@ -306,15 +313,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(TransferMessage message) {
         if (chatController.getState() != ChatController.STATE_CONNECTED) {
             Toast.makeText(this, "Connection was lost!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (message.length() > 0) {
-            byte[] send = message.getBytes();
-            chatController.write(send);
+        if (message != null) {
+            byte[] data = SerializationUtils.serialize(message);
+            chatController.write(data);
         }
     }
 

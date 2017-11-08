@@ -5,8 +5,8 @@ package add.bloodconnection.common;
  */
 
 import java.io.Serializable;
-import java.util.*;
-import java.text.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class CommandTransfer extends TransferMessage implements Serializable {
 

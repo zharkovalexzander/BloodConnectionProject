@@ -5,7 +5,8 @@ package add.bloodconnection.common;
  */
 
 public enum Response {
-    OK(0x00, "OK"), ERROR(0x01, "ERROR");
+    OK(0x00, "OK"), ERROR(0x01, "ERROR"), BRACELET_MAC(0x02, "MAC"), BRACELET_VIBRATION(0x03, "VIB"),
+    BRACELET_LISTENHEARTRATE(0x04, "LHR"), BRACELET_STARTHEARTRATE(0x05, "SHR"), BRACELET_BATTERY(0x06, "BAT");
 
     private int reponseValue;
     private String msgReponse;
