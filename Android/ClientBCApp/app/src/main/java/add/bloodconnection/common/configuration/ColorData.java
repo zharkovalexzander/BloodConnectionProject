@@ -2,16 +2,15 @@ package add.bloodconnection.common.configuration;
 
 import java.util.Arrays;
 
-public class HemoglobineData extends BloodParts {
-
-	public HemoglobineData() {
+public class ColorData extends BloodParts {
+	
+	public ColorData() {
 		super();
-        this.size = MemoryCapacity.BloodBodiesResearch.getSize();
-        this.addressSpace = new long[this.size];
-		this.fileMemoryName = "hemData.bcmf";
+		this.size = MemoryCapacity.BloodBodiesResearch.getSize();
+		this.addressSpace = new long[this.size];
 	}
-
-	public HemoglobineData(HemoglobineData another) {
+	
+	public ColorData(ColorData another) {
 		super(another);
 	}
 
@@ -32,7 +31,6 @@ public class HemoglobineData extends BloodParts {
 	
 	@Override 
 	public String toString() {
-		return "Hemoglobine: " + Arrays.toString(format());
+		return "Blood quotient: " + Arrays.toString(format());
 	}
-
 }

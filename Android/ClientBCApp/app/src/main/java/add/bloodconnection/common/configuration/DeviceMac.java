@@ -18,7 +18,7 @@ public class DeviceMac extends DeviceInfo {
 
     @Override
     public synchronized String getMac() {
-        long[] mac = decode();
+    	long[] mac = decode();
         StringBuilder bd = new StringBuilder();
         for(int i = mac.length - 1; i >= 0; --i) {
             if(mac[i] <= 15) {

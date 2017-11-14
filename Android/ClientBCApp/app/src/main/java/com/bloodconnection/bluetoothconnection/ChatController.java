@@ -24,6 +24,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -201,7 +202,7 @@ public class ChatController {
             try {
                 tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(APP_NAME, MY_UUID);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Log.e("GOVNO", ex.getMessage());
             }
             serverSocket = tmp;
         }

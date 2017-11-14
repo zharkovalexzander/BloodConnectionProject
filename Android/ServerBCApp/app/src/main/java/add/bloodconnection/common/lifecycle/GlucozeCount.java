@@ -88,7 +88,7 @@ public class GlucozeCount extends LifePoint {
             return;
         }
         double chance = rand.nextDouble();
-        if(chance <= 0.02) {
+        if(chance <= 0.8) {
             diabetics = true;
         }
     }

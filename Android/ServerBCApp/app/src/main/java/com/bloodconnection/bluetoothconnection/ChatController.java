@@ -222,8 +222,19 @@ public class ChatController {
                         switch (state) {
                             case STATE_LISTEN:
                             case STATE_CONNECTING:
-                                // start the connected thread.
-                                connected(socket, socket.getRemoteDevice());
+                                Message msg = handler.obtainMessage(MainActivity.ALLOW_CONNECTION);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("device", socket.getRemoteDevice().getAddress());
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+                                /*try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                if(MainActivity.isAllowedToConnect()) {*/
+                                    connected(socket, socket.getRemoteDevice());
+                                //}
                                 break;
                             case STATE_NONE:
                             case STATE_CONNECTED:
