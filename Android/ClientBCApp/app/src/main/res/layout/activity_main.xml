@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.bloodconnection.bluetoothconnection.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_drawer_selected"
+    android:orientation="vertical"
+    android:visibility="visible"
+    tools:context="com.bloodconnection.bluetoothconnection.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -16,55 +19,759 @@
         android:paddingTop="@dimen/tool_bar_top_padding"
         android:transitionName="actionBar" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_weight="0.2"
-        android:orientation="vertical"
-        android:paddingTop="30dp"
-        android:id="@+id/linearLayout2">
+        android:visibility="visible">
 
-        <TextView
-            android:id="@+id/status"
+        <FrameLayout
+            android:id="@+id/ftameLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@drawable/maxresdefault">
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/cardiogram" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/dataOuter"
+            android:layout_width="match_parent"
+            android:layout_height="700dp"
+            android:layout_below="@+id/ftameLayout1"
+            android:orientation="horizontal">
+
+            <com.wefika.flowlayout.FlowLayout
+                android:id="@+id/dataContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <FrameLayout
+                    android:id="@+id/glucozeData"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="top|start"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_signin_btn_dark_text_default"
+                    android:elevation="3dp">
+
+                    <TextView
+                        android:id="@+id/gluHead"
+                        android:layout_width="105dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Glucose"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/gluText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/gluDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/gluTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="30dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/gluRotating"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/loader"
+                        app:srcCompat="@drawable/loader" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/eryData"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="top|start"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_signin_btn_dark_text_default"
+                    android:elevation="3dp">
+
+                    <TextView
+                        android:id="@+id/eryDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/eryTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="30dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/eryHead"
+                        android:layout_width="151dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Erythrocytes"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/eryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="18sp" />
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/eryRotating"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/loader"
+                        app:srcCompat="@drawable/loader" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/leuData"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="top|start"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_signin_btn_dark_text_default"
+                    android:elevation="3dp">
+
+                    <TextView
+                        android:id="@+id/leuDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/leuTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="30dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/leuHead"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Leukocytes"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/leuText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="18sp" />
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/leuRotating"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/loader"
+                        app:srcCompat="@drawable/loader" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/hemData"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="top|start"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/common_signin_btn_dark_text_default"
+                    android:elevation="3dp">
+
+                    <TextView
+                        android:id="@+id/hemDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/hemHead"
+                        android:layout_width="146dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Hemoglobin"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hemText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/hemTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center"
+                        android:layout_marginLeft="55dp"
+                        android:layout_marginTop="30dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center"
+                        android:textColor="@color/material_drawer_primary_text"
+                        android:textSize="14sp" />
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/hemRotating"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/loader"
+                        app:srcCompat="@drawable/loader" />
+                </FrameLayout>
+            </com.wefika.flowlayout.FlowLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/connections"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Not Connected"
-            android:textColor="@color/colorPrimaryDark" />
+            android:layout_below="@id/dataOuter"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0.2"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
-        <Button
-            android:id="@+id/btn_connect"
+            <FrameLayout
+                android:id="@+id/fl1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/common_signin_btn_dark_text_default"
+                android:elevation="3dp">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/material_drawer_accent"
+                    android:enabled="false"
+                    android:text="N/A"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/h1"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Tracker"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/t2"
+                    android:layout_width="153dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="is not connected"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="18sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/headColor"
+                android:elevation="3dp">
+
+                <EditText
+                    android:id="@+id/trackertext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top|bottom|left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/headColor"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/default_fill_color"
+                    android:textSize="12sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl3"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/common_signin_btn_dark_text_default"
+                android:elevation="3dp">
+
+                <TextView
+                    android:id="@+id/h2"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Bracelet"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/t3"
+                    android:layout_width="155dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="is not connected"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/angry_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/material_drawer_accent"
+                    android:enabled="false"
+                    android:text="N/A"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl4"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="top|start"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/headColor"
+                android:elevation="3dp"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/bracelettext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top|bottom|left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/headColor"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/default_fill_color"
+                    android:textSize="12sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top|start"
+                android:layout_weight="0.2"
+                android:background="@color/common_signin_btn_dark_text_default"
+                android:elevation="3dp">
+
+                <TextView
+                    android:id="@+id/h5"
+                    android:layout_width="231dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Find bracelet"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/angry_btn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/material_drawer_accent"
+                    android:text="N/A"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bracelet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Connect" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.2"
-        android:orientation="vertical"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp">
-
-        <Button
-            android:id="@+id/btn_on_bracelet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_below="@id/dataOuter"
+            android:layout_centerHorizontal="true"
             android:layout_weight="0.2"
-            android:text="Connect me to bracelet" />
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
-        <Button
-            android:id="@+id/btn_send_msg_to_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.2"
-            android:text="Vibrate" />
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/flb1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/common_signin_btn_dark_text_default"
+                android:elevation="3dp">
+
+                <Button
+                    android:id="@+id/buttonb"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/headColor"
+                    android:enabled="true"
+                    android:text="SCAN"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/hb1"
+                    android:layout_width="201dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Scan heart rate"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tb2"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Don`t move while scanning"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flb2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/headColor"
+                android:elevation="3dp">
+
+                <com.victor.loading.rotate.RotateLoading
+                    android:id="@+id/rotateloading"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    app:loading_color="#ffffff"
+                    app:loading_width="5dp" />
+
+                <FrameLayout
+                    android:id="@+id/hrcover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/trackertextb"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginRight="30dp"
+                        android:background="@color/headColor"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false"
+                        android:text="96"
+                        android:textAlignment="center"
+                        android:textColor="@color/default_fill_color"
+                        android:textSize="36sp" />
+
+                    <ImageView
+                        android:id="@+id/hiv"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        app:srcCompat="@drawable/wh" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flb3"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/common_signin_btn_dark_text_default"
+                android:elevation="3dp">
+
+                <TextView
+                    android:id="@+id/hb2"
+                    android:layout_width="179dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="25dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Battery status"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/material_drawer_primary_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/angry_btnb"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/headColor"
+                    android:enabled="true"
+                    android:text="GET"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flb4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.2"
+                android:background="@color/headColor"
+                android:elevation="3dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:visibility="visible">
+
+                <com.victor.loading.rotate.RotateLoading
+                    android:id="@+id/rotateloadingb"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    app:loading_color="#ffffff"
+                    app:loading_width="5dp" />
+
+                <com.github.lzyzsd.circleprogress.CircleProgress
+                    android:id="@+id/circle_progress"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"
+                    app:circle_finished_color="@color/colorAccent"
+                    app:circle_unfinished_color="@color/common_signin_btn_light_text_focused" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

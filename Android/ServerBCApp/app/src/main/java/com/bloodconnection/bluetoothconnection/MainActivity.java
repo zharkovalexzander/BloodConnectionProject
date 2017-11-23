@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bloodconnection.bluetoothconnection.bracelet.helpers.CustomBluetoothProfile;
-import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.math3.random.RandomDataGenerator;
@@ -48,8 +47,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
-//custom packages
 import add.bloodconnection.common.CommandTransfer;
 import add.bloodconnection.common.MessageType;
 import add.bloodconnection.common.Response;
@@ -69,13 +68,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView consoleMain;
     private TextView consoleSecondary;
     private Dialog dialog;
-    private ArrayAdapter < String > chatAdapter;
-    private ArrayList < TransferMessage > callbacksFromDevice;
-    private ArrayList < String > callbacksFromDeviceAdapter;
-    private ArrayList < String > commandsToDevice;
+    private ArrayAdapter <String> chatAdapter;
+    private ArrayList <TransferMessage> callbacksFromDevice;
+    private ArrayList <String> callbacksFromDeviceAdapter;
+    private ArrayList <String> commandsToDevice;
     private BluetoothAdapter bluetoothAdapter;
-    private Drawer.Result drawerResult = null;
-    private List < BloodParts > data;
+    private List <BloodParts> data;
 
     private Body body;
     private GlucoseResultHandler glucoseResultHandler;
@@ -86,22 +84,23 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
     public static final int ALLOW_CONNECTION = 6;
+    public static final int IS_LISTETING_HEART_RATE = 7;
+    public static final int IS_SENDING_BATTERY_STATUS = 8;
     public static final String DEVICE_OBJECT = "device_name";
     private static boolean isAllowedToConnect = false;
 
     private boolean iveStartedNotification = false;
 
-    //data processing
     private DeviceMac thisMac;
     private DeviceMac braceletMac;
     private DeviceMac androidMac;
     private ErythrocytesData ery;
     private LeucocytesData lei;
     private HemoglobineData hem;
-    //private ColorData clr;
     private GlucozeData glu;
 
-    //bracelet connection
+    private AtomicInteger braceletStatus;
+
     Boolean isListeningHeartRate = false;
 
     BluetoothAdapter braceletAdapter;
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private ChatController chatController;
     private BluetoothDevice connectingDevice;
-    private ArrayAdapter < String > discoveredDevicesAdapter;
+    private ArrayAdapter <String> discoveredDevicesAdapter;
     private boolean connected;
     private DataHandler dataHandler;
 
@@ -128,29 +127,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViewsByIds();
 
-        //check device support bluetooth or not
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available!", Toast.LENGTH_SHORT).show();
             finish();
-        } else {
-            //set chat adapter
-            callbacksFromDeviceAdapter = new ArrayList < > ();
-            callbacksFromDevice = new ArrayList < > ();
-            commandsToDevice = new ArrayList < > ();
-            chatAdapter = new ArrayAdapter < String > (this, android.R.layout.simple_list_item_1, callbacksFromDeviceAdapter);
+        }
+            callbacksFromDeviceAdapter = new ArrayList<>();
+            callbacksFromDevice = new ArrayList<>();
+            commandsToDevice = new ArrayList<>();
+            chatAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, callbacksFromDeviceAdapter);
 
             initializeObjects();
 
-            dataHandler = new DataHandler();
-
             body.eh.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            //bd.ch.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             body.gh.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             body.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             glucoseResultHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            dataHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+            //dataHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static boolean isAllowedToConnect() {
@@ -168,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 0x20,
                 0x17
         });
+        readBracelet = null;
         braceletMac = new DeviceMac();
         androidMac = new DeviceMac();
         try {
@@ -179,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             tryGetDataFromMemory(Response.BRACELET_MAC);
-            if (braceletAdapter != null && braceletAdapter.isEnabled()) {
+            if (!braceletMac.isEmpty()) {
                 connectBracelet();
             } else {
                 writeToConsole(new CommandTransfer("Unable to connect bracelet", new Date(), Response.ERROR).toString(),
@@ -190,10 +184,11 @@ public class MainActivity extends AppCompatActivity {
                     MessageType.Error, MAIN_TERMINAL);
         }
 
+        braceletStatus = new AtomicInteger(0);
+
         ery = new ErythrocytesData();
         lei = new LeucocytesData();
         hem = new HemoglobineData();
-        //clr = new ColorData();
         glu = new GlucozeData();
 
         body = new Body();
@@ -209,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
 
         for (BloodParts entry: data) {
             readBloodDataToMemory(entry);
-            Log.w("ENTRY", "" + entry.getDataLen());
         }
     }
 
@@ -235,6 +229,13 @@ public class MainActivity extends AppCompatActivity {
                     switch (msg.arg1) {
                         case ChatController.STATE_CONNECTED:
                             writeToConsole("Connected to: " + connectingDevice.getName(), MessageType.Connection, MAIN_TERMINAL);
+                            if(!braceletMac.isEmpty()) {
+                                sendMessage(new CommandTransfer("Bracelet Connected", new Date(),
+                                        Response.BRACELET_CONNECTED));
+                            }
+                            if(!androidMac.isEmpty() && connectingDevice.getAddress().equalsIgnoreCase(androidMac.getMac())) {
+                                askForCursors();
+                            }
                             break;
                         case ChatController.STATE_CONNECTING:
                             writeToConsole("Connecting...", MessageType.Connection, MAIN_TERMINAL);
@@ -246,16 +247,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case MESSAGE_WRITE:
-                    TransferMessage yourObject = SerializationUtils.deserialize((byte[]) msg.obj);
-                    commandsToDevice.add(yourObject.toString());
                     chatAdapter.notifyDataSetChanged();
                     break;
                 case MESSAGE_READ:
                     synchronized(msg) {
                         TransferMessage tMsg = SerializationUtils.deserialize((byte[]) msg.obj);
-                        callbacksFromDevice.add(tMsg);
-                        callbacksFromDeviceAdapter.add(tMsg.toString());
-                        manipulateRead(tMsg);
+                        try {
+                            callbacksFromDevice.add(tMsg);
+                            callbacksFromDeviceAdapter.add(tMsg.toString());
+                            manipulateRead(tMsg);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         chatAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -280,6 +283,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     });
+
+    private void askForCursors() {
+        sendMessage(new CommandTransfer("CURSORS", new Date(), Response.CURSORS));
+    }
 
     private void showPrinterPickDialog() {
         dialog = new Dialog(this);
@@ -353,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private synchronized void manipulateRead(TransferMessage msg) {
+    private synchronized void manipulateRead(TransferMessage msg) throws InterruptedException {
         switch (msg.getReponseStatus()) {
             case BRACELET_MAC:
                 if (braceletMac.isEmpty()) {
@@ -370,47 +377,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case BRACELET_VIBRATION:
                 try {
-                    startVibrate();
+                    startVibrate((byte)3);
                     writeToConsole(msg.toString(), MessageType.Response, MAIN_TERMINAL);
                 } catch (Exception exe) {
                     writeToConsole(new CommandTransfer(exe.getMessage(), new Date(), Response.ERROR).toString(),
                             MessageType.Error, MAIN_TERMINAL);
-                }
-                break;
-            case ERY:
-                if (dataHandler != null) {
-                    String[] str = msg.getMessage().split(":");
-                    if (str[0] != "ERY" && str.length != 2) break;
-                    Integer cursor = Integer.parseInt(str[1]);
-                    dataHandler.changeCursor(Response.ERY, cursor);
-                    Log.w("IGOT", msg.getMessage());
-                }
-                break;
-            case GLU:
-                if (dataHandler != null) {
-                    String[] str = msg.getMessage().split(":");
-                    if (str[0] != "GLU" && str.length != 2) break;
-                    Integer cursor = Integer.parseInt(str[1]);
-                    dataHandler.changeCursor(Response.GLU, cursor);
-                    Log.w("IGOT", msg.getMessage());
-                }
-                break;
-            case HEM:
-                if (dataHandler != null) {
-                    String[] str = msg.getMessage().split(":");
-                    if (str[0] != "HEM" && str.length != 2) break;
-                    Integer cursor = Integer.parseInt(str[1]);
-                    dataHandler.changeCursor(Response.HEM, cursor);
-                    Log.w("IGOT", msg.getMessage());
-                }
-                break;
-            case LEU:
-                if (dataHandler != null) {
-                    String[] str = msg.getMessage().split(":");
-                    if (str[0] != "LEU" && str.length != 2) break;
-                    Integer cursor = Integer.parseInt(str[1]);
-                    dataHandler.changeCursor(Response.LEU, cursor);
-                    Log.w("IGOT", msg.getMessage());
                 }
                 break;
             case AFC:
@@ -420,12 +391,58 @@ public class MainActivity extends AppCompatActivity {
                     sendMessage(new CommandTransfer(thisMac.getMac(), new Date(), Response.BRACELET_MAC));
                     try {
                         tryWriteDataToMemory(Response.AFC, androidMac.getMac().getBytes());
+                        askForCursors();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     chatController.stop();
                     chatController.start();
+                }
+                break;
+            case BRACELET_STARTHEARTRATE:
+                new Handler().post(new Runnable(){
+                    @Override
+                    public void run() {
+                        while(true) {
+                            if(braceletStatus.get() == 0) {
+                                braceletStatus.set(IS_LISTETING_HEART_RATE);
+                                startScanHeartRate();
+                                break;
+                            }
+                        }
+                    }
+                });
+                break;
+            case BRACELET_CONNECTED:
+                if(!braceletMac.isEmpty()) {
+                    sendMessage(new CommandTransfer("Bracelet Connected", new Date(), Response.BRACELET_CONNECTED));
+                }
+                break;
+            case BRACELET_BATTERY:
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        while(true) {
+                            if(braceletStatus.get() == 0) {
+                                braceletStatus.set(IS_SENDING_BATTERY_STATUS);
+                                getBatteryStatus();
+                                break;
+                            }
+                        }
+                    }
+                });
+                break;
+            case CURSORS:
+                String[] strings = msg.getMessage().split(":");
+                if(dataHandler == null && strings.length == 4) {
+                    int i1 = Integer.valueOf(strings[0]);
+                    int i2 = Integer.valueOf(strings[1]);
+                    int i3 = Integer.valueOf(strings[2]);
+                    int i4 = Integer.valueOf(strings[3]);
+                    dataHandler = new DataHandler(i1, i2, i3, i4);
+                    dataHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    writeToConsole("Data was synced with phone", MessageType.Reason, MAIN_TERMINAL);
                 }
                 break;
             default:
@@ -684,18 +701,6 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
             }
       }
-   /*     switch (rep) {
-
-                break;
-            case AFC:
-                SharedPreferences sharedPrefAndroid = this.getSharedPreferences(
-                        getString(R.string.phone_mac), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editorAndroid = sharedPrefAndroid.edit();
-                editorAndroid.putString(getString(R.string.phone_mac), new String(bytes));
-                editorAndroid.commit();
-                String macAndroid = sharedPrefAndroid.getString(getString(R.string.phone_mac), null);
-                break;
-        }*/
     }
 
     private void stateConnected() {
@@ -703,6 +708,10 @@ public class MainActivity extends AppCompatActivity {
         connected = true;
         writeToConsole(new CommandTransfer("Connected to bracelet", new Date(), Response.OK).toString(),
                 MessageType.Bracelet, MAIN_TERMINAL);
+        if(!braceletMac.isEmpty()) {
+            sendMessage(new CommandTransfer("Bracelet Connected", new Date(), Response.BRACELET_CONNECTED));
+        }
+        readBracelet = null;
     }
 
     private void stateDisconnected() {
@@ -721,8 +730,18 @@ public class MainActivity extends AppCompatActivity {
                 1
         });
         braceletGatt.writeCharacteristic(bchar);
-        writeBracelet = new CommandTransfer("Scanning heart rate", new Date(), Response.BRACELET_STARTHEARTRATE);
-        //writeToConsole(writeBracelet.toString(), MessageType.Bracelet);
+        writeToConsole(new CommandTransfer("Scanning heart rate", new Date(), Response.BRACELET_STARTHEARTRATE).toString(),
+                MessageType.Bracelet, MAIN_TERMINAL);
+    }
+
+    private void getConnectionChar() {
+        BluetoothGattCharacteristic bchar = braceletGatt.getService(CustomBluetoothProfile.BraceletChars.service)
+                .getCharacteristic(CustomBluetoothProfile.BraceletChars.connectionCharacteristic);
+        if (!braceletGatt.readCharacteristic(bchar)) {
+            writeToConsole(new CommandTransfer("Failed to get scan info", new Date(), Response.ERROR).toString(),
+                    MessageType.Bracelet, SCANNING_TERMINAL);
+            Toast.makeText(this, "Failed to get scan info", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void listenHeartRate() {
@@ -733,7 +752,6 @@ public class MainActivity extends AppCompatActivity {
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         braceletGatt.writeDescriptor(descriptor);
         isListeningHeartRate = true;
-        readBracelet = new CommandTransfer("Listeting heart rate", new Date(), Response.BRACELET_LISTENHEARTRATE);
     }
 
     private void readScanHeartRate() {
@@ -744,8 +762,8 @@ public class MainActivity extends AppCompatActivity {
                     MessageType.Bracelet, SCANNING_TERMINAL);
             Toast.makeText(this, "Failed to get scan info", Toast.LENGTH_SHORT).show();
         }
-        readBracelet = new CommandTransfer("Getting heart rate info", new Date(), Response.BRACELET_LISTENHEARTRATE);
-        writeToConsole(readBracelet.toString(), MessageType.Bracelet, SCANNING_TERMINAL);
+        writeToConsole(new CommandTransfer("Getting heart rate info", new Date(), Response.BRACELET_LISTENHEARTRATE).toString(),
+                MessageType.Bracelet, SCANNING_TERMINAL);
     }
 
     private void getBatteryStatus() {
@@ -756,15 +774,15 @@ public class MainActivity extends AppCompatActivity {
                     MessageType.Bracelet, MAIN_TERMINAL);
             Toast.makeText(this, "Failed get battery info", Toast.LENGTH_SHORT).show();
         }
-        readBracelet = new CommandTransfer("Getting battery status", new Date(), Response.BRACELET_BATTERY);
-        writeToConsole(readBracelet.toString(), MessageType.Bracelet, MAIN_TERMINAL);
+        writeToConsole(new CommandTransfer("Getting battery braceletStatus", new Date(), Response.BRACELET_BATTERY).toString(),
+                MessageType.Bracelet, MAIN_TERMINAL);
     }
 
-    private void startVibrate() {
+    private void startVibrate(byte type) {
         BluetoothGattCharacteristic bchar = braceletGatt.getService(CustomBluetoothProfile.AlertNotification.service)
                 .getCharacteristic(CustomBluetoothProfile.AlertNotification.alertCharacteristic);
         bchar.setValue(new byte[] {
-                2
+                type
         });
         if (!braceletGatt.writeCharacteristic(bchar)) {
             writeToConsole(new CommandTransfer("Failed start vibration", new Date(), Response.ERROR).toString(),
@@ -787,6 +805,7 @@ public class MainActivity extends AppCompatActivity {
                     MessageType.Bracelet, MAIN_TERMINAL);
             Toast.makeText(this, "Failed stop vibrate", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
@@ -797,8 +816,10 @@ public class MainActivity extends AppCompatActivity {
             Log.v("test", "onConnectionStateChange");
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 stateConnected();
+                isAllowedToConnect = true;
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 stateDisconnected();
+                isAllowedToConnect = false;
             }
 
         }
@@ -807,7 +828,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
             Log.v("test", "onServicesDiscovered");
-            // listenHeartRate();
+            listenHeartRate();
         }
 
         @Override
@@ -815,8 +836,17 @@ public class MainActivity extends AppCompatActivity {
             super.onCharacteristicRead(gatt, characteristic, status);
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
-            writeToConsole(new CommandTransfer(Arrays.toString(data), new Date(), readBracelet.getReponseStatus()).toString(),
+            writeToConsole(String.valueOf(data[1]),
                     MessageType.Query, MAIN_TERMINAL);
+            switch (braceletStatus.get()) {
+                case IS_LISTETING_HEART_RATE:
+                    sendMessage(new CommandTransfer(String.valueOf(data[1]), new Date(), Response.BRACELET_LISTENHEARTRATE));
+                    break;
+                case IS_SENDING_BATTERY_STATUS:
+                    sendMessage(new CommandTransfer(String.valueOf(data[1]), new Date(), Response.BRACELET_BATTERY));
+                    break;
+            }
+            braceletStatus.set(0);
         }
 
         @Override
@@ -830,8 +860,17 @@ public class MainActivity extends AppCompatActivity {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.v("test", "onCharacteristicChanged");
             byte[] data = characteristic.getValue();
-            writeToConsole(new CommandTransfer(Arrays.toString(data), new Date(), readBracelet.getReponseStatus()).toString(),
+            writeToConsole(String.valueOf(data[1]),
                     MessageType.Query, MAIN_TERMINAL);
+            switch (braceletStatus.get()) {
+                case IS_LISTETING_HEART_RATE:
+                    sendMessage(new CommandTransfer(String.valueOf(data[1]), new Date(), Response.BRACELET_LISTENHEARTRATE));
+                    break;
+                case IS_SENDING_BATTERY_STATUS:
+                    sendMessage(new CommandTransfer(String.valueOf(data[1]), new Date(), Response.BRACELET_BATTERY));
+                    break;
+            }
+            braceletStatus.set(0);
         }
 
         @Override
@@ -866,10 +905,6 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    private boolean hasPairedDevice() {
-        return (this.bluetoothAdapter.getBondedDevices().size() == 1);
-    }
-
     class Body extends AsyncTask < Void, Void, Void > {
         private LifePoint leukocytesCount,
                 eritrocytesCount,
@@ -877,17 +912,15 @@ public class MainActivity extends AppCompatActivity {
                 glucoseCount;
         private List < ReasonTimeCount > reasonTimeCountsList;
         BloodPartsHandler eh;
-        //MainActivity.ColorHandler ch;
         GlucozeHandler gh;
 
         private Body() {
-            this.reasonTimeCountsList = new LinkedList < > ();
+            this.reasonTimeCountsList = new LinkedList<>();
             this.leukocytesCount = new LeukocytesCount(this.reasonTimeCountsList);
             this.eritrocytesCount = new ErythrocytesCount(this.reasonTimeCountsList);
             this.hemoglobineCount = new HemoglobineCount(this.reasonTimeCountsList);
             this.glucoseCount = new GlucozeCount(this.reasonTimeCountsList);
             this.eh = new BloodPartsHandler(this.eritrocytesCount, ery, this.leukocytesCount, lei, this.hemoglobineCount, hem);
-            //this.ch = new MainActivity.ColorHandler(ery, hem, clr);
             this.gh = new GlucozeHandler(this.glucoseCount, glu);
         }
 
@@ -904,15 +937,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 chance = random.nextDouble();
                 Log.w("", "" + chance);
-                if (chance < 0.002) {
+                if (chance < 0.00000000002) {
                     if (!findByReason(Reason.PREGNANCY)) {
                         reasonTimeCountsList.add(new ReasonTimeCount(Reason.PREGNANCY,
                                 rdg.nextLong(23932800000L, 31881600000L)));
-                        result = "User is pregnant, my congratulations!";
+                        result = "User is pregnant!";
                         writeToConsole(result, MessageType.Reason, SCANNING_TERMINAL);
                     }
                 } else {
-                    if (chance < 0.005) {
+                    if (chance < 0.00005) {
                         if (findByReason(Reason.FOOD_DRINK)) {
                             reasonTimeCountsList.add(new ReasonTimeCount(Reason.FOOD_DRINK,
                                     rdg.nextLong(1800, 3600)));
@@ -920,7 +953,7 @@ public class MainActivity extends AppCompatActivity {
                             writeToConsole(result, MessageType.Reason, SCANNING_TERMINAL);
                         }
                     } else {
-                        if (chance < 0.08) {
+                        if (chance < 0.0002) {
                             if (!findByReason(Reason.SMOKING)) {
                                 reasonTimeCountsList.add(new ReasonTimeCount(Reason.SMOKING,
                                         rdg.nextLong(157680000000L, 473040000000L)));
@@ -928,7 +961,7 @@ public class MainActivity extends AppCompatActivity {
                                 writeToConsole(result, MessageType.Reason, SCANNING_TERMINAL);
                             }
                         } else {
-                            if (chance < 0.25) {
+                            if (chance < 0.10) {
                                 if (!findByReason(Reason.FOOD_DRINK)) {
                                     reasonTimeCountsList.add(new ReasonTimeCount(Reason.FOOD_DRINK,
                                             rdg.nextLong(36000L, 72000L)));
@@ -939,7 +972,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                             } else {
-                                if (chance < 0.3) {
+                                if (chance < 0.15) {
                                     if (!findByReason(Reason.THIRST) && !findByReason(Reason.FOOD_DRINK)) {
                                         reasonTimeCountsList.add(new ReasonTimeCount(Reason.THIRST,
                                                 rdg.nextLong(600000L, 3600000L)));
@@ -1055,13 +1088,11 @@ public class MainActivity extends AppCompatActivity {
 
         private GlucozeData glucozeData;
         private GlucozeCount glucozeCount;
-        private int cursor;
         private long result;
 
         public GlucozeHandler(LifePoint glucozeCount, MemoryData glucozeData) {
             this.glucozeCount = (GlucozeCount) glucozeCount;
             this.glucozeData = (GlucozeData) glucozeData;
-            this.cursor = 0;
             this.result = 0;
         }
 
@@ -1078,16 +1109,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     this.glucozeCount.produce();
                     long query = this.glucozeCount.getBloodCharacts();
-                    //Log.w("QUERY", ((query / 100) / 113.12) + "");
                     result += query;
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 if (!this.glucozeData.isFilled()) {
                     try {
                         this.glucozeData.write(result);
-                        cursor++;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1100,20 +1129,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class GlucoseResultHandler extends AsyncTask < Void, Void, Void > {
+    class GlucoseResultHandler extends AsyncTask <Void, Void, Void> {
 
-        private int hemCursor,
-                leuCursor,
-                eriCursor,
-                gluCusror,
+        private int gluCusror,
                 gluCounter;
         private boolean isDiabetics;
 
         public GlucoseResultHandler() {
-   /*this.eriCursor = 0;*/
             this.gluCusror = 1;
-   /*this.hemCursor = 0;
-    this.leuCursor = 0;*/
             this.isDiabetics = false;
             this.gluCounter = 0;
         }
@@ -1141,7 +1164,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("Diabetes", "dangerous");
                     if (braceletConnected()) {
                         try {
-                            startVibrate();
+                            startVibrate((byte)2);
                             Thread.sleep(3000);
                             stopVibrate();
                         } catch (InterruptedException e) {
@@ -1171,74 +1194,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class DataHandler extends AsyncTask < Void, CommandTransfer, Void > {
+    class DataHandler extends AsyncTask <Void, CommandTransfer, Void> {
 
         private int hemCursor,
                 leuCursor,
                 eriCursor,
                 gluCursor;
-        private boolean hemCursorChanged,
-                leuCursorChanged,
-                eriCursorChanged,
-                gluCursorChanged,
-                cursorsWereChanged,
-                notified;
 
-        public DataHandler() {
-            this.eriCursor = ery.getDataLen();
-            this.gluCursor = glu.getDataLen();
-            this.hemCursor = hem.getDataLen();
-            this.leuCursor = lei.getDataLen();
-            this.cursorsWereChanged = false;
-            this.hemCursorChanged = false;
-            this.leuCursorChanged = false;
-            this.eriCursorChanged = false;
-            this.gluCursorChanged = false;
-            this.notified = false;
-        }
-
-        public void changeCursor(Response response, int cursor) {
-            switch (response) {
-                case ERY:
-                    this.eriCursor = cursor;
-                    this.eriCursorChanged = true;
-                    break;
-                case LEU:
-                    this.leuCursor = cursor;
-                    this.leuCursorChanged = true;
-                    break;
-                case GLU:
-                    this.gluCursor = cursor;
-                    this.gluCursorChanged = true;
-                    break;
-                case HEM:
-                    this.hemCursor = cursor;
-                    this.hemCursorChanged = true;
-                    break;
-            }
-            this.cursorsWereChanged = this.eriCursorChanged & this.gluCursorChanged & this.leuCursorChanged &
-                    this.hemCursorChanged;
-            if (this.cursorsWereChanged && !notified) {
-                notified = true;
-                writeToConsole("All data was synchronized", MessageType.Query, MAIN_TERMINAL);
-            }
+        public DataHandler(int eriCursor, int gluCursor, int hemCursor, int leuCursor) {
+            this.eriCursor = eriCursor;
+            this.gluCursor = gluCursor;
+            this.hemCursor = hemCursor;
+            this.leuCursor = leuCursor;
         }
 
         @Override
         protected Void doInBackground(Void...voids) {
-            for (int i = 0; i < 10000; ++i) {
-                if (this.cursorsWereChanged) {
-                    break;
-                } else {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
             while (true) {
-                if (phoneConnected()) {
                     long readEry = ery.read(this.eriCursor);
                     long readGlu = glu.read(this.gluCursor);
                     long readHem = hem.read(this.hemCursor);
@@ -1246,35 +1218,23 @@ public class MainActivity extends AppCompatActivity {
                     if (readEry != 0 && (this.eriCursor != ery.getDataSize())) {
                         this.publishProgress(new CommandTransfer("ERY:" + readEry, new Date(), Response.ERY));
                         this.eriCursor++;
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                    } else {
+                        if (readLeu != 0 && (this.leuCursor != lei.getDataSize())) {
+                            this.publishProgress(new CommandTransfer("LEU:" + readLeu, new Date(), Response.LEU));
+                            this.leuCursor++;
+                        } else {
+                            if (readHem != 0 && (this.hemCursor != hem.getDataSize())) {
+                                this.publishProgress(new CommandTransfer("HEM:" + readHem, new Date(), Response.HEM));
+                                this.hemCursor++;
+                            } else {
+                                if (readGlu != 0 && (this.gluCursor != glu.getDataSize())) {
+                                    this.publishProgress(new CommandTransfer("GLU:" + readGlu, new Date(), Response.GLU));
+                                    this.gluCursor++;
+                                }
+                            }
                         }
                     }
-                    if (readLeu != 0 && (this.leuCursor != lei.getDataSize())) {
-                        this.publishProgress(new CommandTransfer("LEU:" + readLeu, new Date(), Response.LEU));
-                        this.leuCursor++;
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (readHem != 0 && (this.hemCursor != hem.getDataSize())) {
-                        this.publishProgress(new CommandTransfer("HEM:" + readHem, new Date(), Response.HEM));
-                        this.hemCursor++;
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (readGlu != 0 && (this.gluCursor != glu.getDataSize())) {
-                        this.publishProgress(new CommandTransfer("GLU:" + readGlu, new Date(), Response.GLU));
-                        this.gluCursor++;
-                    }
-                }
+
             }
         }
 
@@ -1284,10 +1244,6 @@ public class MainActivity extends AppCompatActivity {
             for (CommandTransfer value: values) {
                 sendMessage(value);
             }
-        }
-
-        private boolean phoneConnected() {
-            return chatController.getState() == ChatController.STATE_CONNECTED;
         }
     }
 }

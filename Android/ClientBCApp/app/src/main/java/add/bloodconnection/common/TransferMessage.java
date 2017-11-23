@@ -10,6 +10,9 @@ import java.util.Date;
  */
 
 public abstract class TransferMessage implements ITransferMessage, Serializable {
+
+    private static final long serialVersionUID = 12358903454871L;
+
     protected String responseMsg;
     protected Date messageDateTime;
     protected Response repStatus;

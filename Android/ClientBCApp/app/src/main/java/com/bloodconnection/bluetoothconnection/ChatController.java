@@ -202,7 +202,7 @@ public class ChatController {
             try {
                 tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(APP_NAME, MY_UUID);
             } catch (IOException ex) {
-                Log.e("GOVNO", ex.getMessage());
+                Log.e("", ex.getMessage());
             }
             serverSocket = tmp;
         }

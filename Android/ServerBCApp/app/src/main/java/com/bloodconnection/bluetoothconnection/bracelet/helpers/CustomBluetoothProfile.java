@@ -26,4 +26,9 @@ public class CustomBluetoothProfile {
         public static UUID controlCharacteristic = UUID.fromString("00002a39-0000-1000-8000-00805f9b34fb");
     }
 
+    public static class BraceletChars {
+        public static UUID service = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb");
+        public static UUID connectionCharacteristic = UUID.fromString("00002A04-0000-1000-8000-00805f9b34fb");
+    }
+
 }

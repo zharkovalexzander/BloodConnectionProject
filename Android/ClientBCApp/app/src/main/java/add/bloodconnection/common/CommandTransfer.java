@@ -10,6 +10,8 @@ import java.util.Date;
 
 public final class CommandTransfer extends TransferMessage implements Serializable {
 
+    private static final long serialVersionUID = 12358903454870L;
+
     public CommandTransfer(String responseMsg, Date messageDateTime, Response repStatus) {
         super(responseMsg, messageDateTime, repStatus);
     }
