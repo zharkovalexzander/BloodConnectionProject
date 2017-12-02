@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private PrimaryDrawerItem pdI;
 
     private static boolean isAnswerPositive = false;
+    private static boolean isAllowedToStart = false;
 
     private DeviceMac trackerMac;
     private ErythrocytesData ery;
@@ -126,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
         findViewsByIds();
 
         initializeAlertBuilder();
@@ -157,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onDrawerClosed(View drawerView) { }
+                    public void onDrawerClosed(View drawerView) {
+                    }
                 }).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
@@ -215,10 +217,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        for(BloodParts entry : data) {
+        for (BloodParts entry : this.data) {
             readBloodDataFromMemory(entry);
-            if(!entry.isEmpty()) {
+            if (!entry.isEmpty()) {
                 try {
                     displayData(entry, entry.read(entry.getDataLen() - 1), true, R.drawable.giphy);
                 } catch (IOException e) {
@@ -234,9 +235,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-       // setAnimations();
+        // setAnimations();
 
         changeButton(btnConnect, "#009885", true, "Connect");
+
     }
 
 
@@ -797,6 +799,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Bluetooth still disabled, turn off application!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+                break;
         }
     }
 

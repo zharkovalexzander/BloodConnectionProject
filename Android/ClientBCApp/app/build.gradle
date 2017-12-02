@@ -5,7 +5,7 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.bloodconnection.BC"
-        minSdkVersion 14
+        minSdkVersion 20
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
     compile 'com.victor:lib:1.0.4'
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
@@ -33,6 +34,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.jakewharton:butterknife:7.0.1'
     compile('com.mikepenz.materialdrawer:library:0.9.5@aar') {
         transitive = true
     }
