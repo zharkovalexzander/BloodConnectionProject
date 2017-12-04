@@ -11,4 +11,8 @@
     <string name="drawer_item_open_source">Open Source</string>
     <string name="drawer_item_contact">Exit</string>
     <string name="tracker_mac"></string>
+    <string name="id"></string>
+    <string name="pass"></string>
+    <string name="email"></string>
+    <string name="dev"></string>
 </resources>

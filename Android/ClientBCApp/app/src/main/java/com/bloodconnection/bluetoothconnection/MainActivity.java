@@ -3,6 +3,7 @@ package com.bloodconnection.bluetoothconnection;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -13,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -45,9 +47,15 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Badgeable;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.victor.loading.rotate.RotateLoading;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,6 +73,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 //custom packages
 import add.bloodconnection.common.CommandTransfer;
@@ -77,6 +86,8 @@ import add.bloodconnection.common.configuration.GlucozeData;
 import add.bloodconnection.common.configuration.HemoglobineData;
 import add.bloodconnection.common.configuration.LeucocytesData;
 import add.bloodconnection.common.misc.GraphicsProcessing;
+import add.bloodconnection.common.misc.PersistantStorage;
+import add.bloodconnection.common.misc.TimestampUtils;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> commandsToDevice;
     private BluetoothAdapter bluetoothAdapter;
     private Drawer.Result drawerResult = null;
+    private PersistantStorage ps;
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
@@ -105,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_DEVICE_OBJECT = 4;
     public static final int MESSAGE_TOAST = 5;
     public static final String DEVICE_OBJECT = "device_name";
+    private Integer id;
+    private Integer devId;
 
     private String deviceValue = new String();
     private PrimaryDrawerItem pdI;
@@ -128,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PersistantStorage.init(this);
 
         findViewsByIds();
 
@@ -239,6 +255,13 @@ public class MainActivity extends AppCompatActivity {
 
         changeButton(btnConnect, "#009885", true, "Connect");
 
+        if(id != -1) {
+            GluTask glutask = new GluTask(id);
+            BCTask bcTask = new BCTask(id);
+            glutask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            bcTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
     }
 
 
@@ -315,6 +338,10 @@ public class MainActivity extends AppCompatActivity {
                                 trackerMac.setNewMac(connectingDevice.getAddress());
                                 try {
                                     tryWriteDataToMemory(Response.AFC, trackerMac.getMac());
+                                    if(devId == -1) {
+                                        DeviceTask deviceTask = new DeviceTask(id);
+                                        deviceTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -429,6 +456,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initializeObjects() {
+        id = retrieveId() == null ? -1 : retrieveId();
+        devId = retrieveDevId() == null ? -1 : retrieveDevId();
+        Log.w("responseWW", "a" + id.toString());
+        //Log.w("responseWW", devId.toString());
         data = new ArrayList<>();
         callbacksFromDeviceAdapter = new ArrayList<>();
         callbacksFromDevice = new ArrayList<>();
@@ -507,6 +538,10 @@ public class MainActivity extends AppCompatActivity {
                     trackerMac.setNewMac(mesg);
                     try {
                         tryWriteDataToMemory(Response.AFC, trackerMac.getMac());
+                        if(devId == -1) {
+                            DeviceTask deviceTask = new DeviceTask(id);
+                            deviceTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
                     } catch (Exception e) {
                         Log.w("ERROR", e.getMessage());
                     }
@@ -641,9 +676,10 @@ public class MainActivity extends AppCompatActivity {
     private void tryGetDataFromMemory(Response rep) throws Exception {
         switch (rep) {
             case AFC:
-                SharedPreferences sharedPref = this.getSharedPreferences(
-                        getString(R.string.tracker_mac), Context.MODE_PRIVATE);
-                String mac = sharedPref.getString(getString(R.string.tracker_mac), null);
+                /*SharedPreferences sharedPref = this.getSharedPreferences(
+                        getString(R.string.tracker_mac), Context.MODE_PRIVATE);*/
+                String mac = PersistantStorage.getProperty("tracker_mac");
+                //sharedPref.getString(getString(R.string.tracker_mac), null);
                 if (mac == null) {
                     throw new Exception("Tracker mac address was not found in memory");
                 } else {
@@ -656,11 +692,12 @@ public class MainActivity extends AppCompatActivity {
     private void tryWriteDataToMemory(Response rep, String str) throws Exception {
         switch (rep) {
             case AFC:
-                SharedPreferences sharedPref = this.getSharedPreferences(
+                /*SharedPreferences sharedPref = this.getSharedPreferences(
                         getString(R.string.tracker_mac), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(getString(R.string.tracker_mac), str);
-                editor.commit();
+                editor.commit();*/
+                PersistantStorage.addProperty("tracker_mac", "str");
                 break;
         }
     }
@@ -827,6 +864,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private Integer retrieveId() {
+       /* SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.id), Context.MODE_PRIVATE);
+        String mac = sharedPref.getString(getString(R.string.id), null);*/
+        String mac = PersistantStorage.getProperty("id");
+        return mac == null ? null : Integer.valueOf(mac);
+    }
+
+    private Integer retrieveDevId() {
+        /*SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.dev), Context.MODE_PRIVATE);
+        String mac = sharedPref.getString(getString(R.string.dev), null);*/
+        String mac = PersistantStorage.getProperty("dev");
+        return mac == null ? null : Integer.valueOf(mac);
+    }
+
+    private void saveDevId(String save) {
+        /*SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.dev), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.dev), save);
+        editor.commit();*/
+        PersistantStorage.addProperty("dev", save);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -889,4 +951,207 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    class DeviceTask extends AsyncTask<Void, Void, Void> {
+
+        public Integer id;
+
+        public DeviceTask(Integer id) {
+            this.id = id;
+        }
+
+        protected Void doInBackground(Void... voids) {
+            Log.w("responseWW", "startedD");
+            try {
+                OkHttpClient client = new OkHttpClient();
+                client.setConnectTimeout(15, TimeUnit.SECONDS);
+                client.setReadTimeout(15, TimeUnit.SECONDS);
+                try {
+                    Request requestOne = new Request.Builder()
+                            .url("http://192.168.43.253:8080/fetched/devices/" + id)
+                            .build();
+
+                    com.squareup.okhttp.Response responseOne = client.newCall(requestOne).execute();
+                    final String repOne = responseOne.body().string();
+
+                    Log.w("responseWW", "5here" + repOne);
+
+                        if(repOne.length() > 0) {
+                            JSONArray jar = new JSONArray(repOne);
+                            for (int i = 0; i < jar.length(); ++i) {
+                                JSONObject obj = jar.getJSONObject(i);
+                                if (obj.getString("devicemac").equalsIgnoreCase(trackerMac.getMac()))
+                                    return null;
+                            }
+                        }
+
+                        Log.w("responseWW", "here");
+
+                        RequestBody body = new FormEncodingBuilder()
+                                .add("value", trackerMac.getMac())
+                                .add("id", id.toString())
+                                .build();
+
+                        Request request = new Request.Builder()
+                                .url("http://192.168.43.253:8080/fetched/devices/add")
+                                .post(body)
+                                .build();
+
+                        Request request1 = new Request.Builder()
+                                .url("http://192.168.43.253:8080/fetched/devices/get")
+                                .post(body)
+                                .build();
+
+
+                        com.squareup.okhttp.Response response = client.newCall(request).execute();
+                        com.squareup.okhttp.Response response1 = client.newCall(request1).execute();
+                        final String rep = response1.body().string();
+                        Log.w("responseWW", "5" + rep);
+                        if (Integer.valueOf(rep) != -1) {
+                            devId = Integer.valueOf(rep);
+                            saveDevId(Integer.valueOf(rep).toString());
+                            Log.w("responseWW", "6" + devId.toString());
+                        }
+
+                } catch (Exception e) {
+                    Log.w("responseWW", "" + e.getMessage());
+                }
+            } catch (Exception e) {
+                Log.w("responseWW", "" + e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    class BCTask extends AsyncTask<Void, Void, Void> {
+
+        public Integer id;
+
+        public BCTask(Integer id) {
+            this.id = id;
+        }
+
+        protected Void doInBackground(Void ... voids) {
+            while(true) {
+                if (devId == -1) continue;
+                Log.w("responseWW", "startedB");
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    client.setConnectTimeout(15, TimeUnit.SECONDS);
+                    client.setReadTimeout(15, TimeUnit.SECONDS);
+                    try {
+                        Request request = new Request.Builder()
+                                .url("http://192.168.43.253:8080/fetched/bc/" + devId)
+                                .build();
+
+                        com.squareup.okhttp.Response response = client.newCall(request).execute();
+                        final String rep = response.body().string();
+                        //Log.w("responseWW", Integer.valueOf(rep).toString());
+                        JSONObject json = new JSONObject(rep);
+                        Integer jar = json.getJSONArray("bloodCellsData").length();
+                        while (true) {
+                            Long e = ery.read(jar);
+                            Long h = hem.read(jar);
+                            Long l = ery.read(jar);
+
+                            if (e != 0 && h != 0 && l != 0) {
+                                RequestBody body = new FormEncodingBuilder()
+                                        .add("id", id.toString())
+                                        .add("dev", devId.toString())
+                                        .add("hem", h.toString())
+                                        .add("ery", e.toString())
+                                        .add("le", l.toString())
+                                        .add("date", new Date().toString())
+                                        .build();
+
+                                Request requestNext = new Request.Builder()
+                                        .url("http://192.168.43.253:8080/fetched/bc/add")
+                                        .post(body)
+                                        .build();
+
+                                com.squareup.okhttp.Response devresponse = client.newCall(requestNext).execute();
+                                final String devrep = devresponse.body().string();
+                                Log.w("responseEE", devrep);
+                                ++jar;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                }
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void voids) {
+            // здесь можете обрабатывать ошибки при работе с сетью
+        }
+    }
+
+    class GluTask extends AsyncTask<Void, Void, Void> {
+
+        private Integer id;
+
+        public GluTask(Integer id) {
+            this.id = id;
+        }
+
+        protected Void doInBackground(Void ... voids) {
+            while(true) {
+                if(devId == -1) continue;
+                Log.w("responseEE", "startedG");
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    client.setConnectTimeout(15, TimeUnit.SECONDS);
+                    client.setReadTimeout(15, TimeUnit.SECONDS);
+                    try {
+
+                        Request request = new Request.Builder()
+                                .url("http://192.168.43.253:8080/fetched/glu/" + devId)
+                                .build();
+
+                        com.squareup.okhttp.Response response = client.newCall(request).execute();
+                        final String rep = response.body().string();
+                        Log.w("responseEE", String.valueOf(rep.length()));
+                        //Log.w("responseWW", Integer.valueOf(rep).toString());
+                        //JSONObject json = new JSONObject(rep);
+                        Integer jar = rep.length() <= 2 ? 0 : new JSONObject(rep).getJSONArray("glucozeData").length();
+                        Log.w("responseEE", jar.toString());
+                        while (true) {
+                            if(glu.read(jar) == 0) continue;
+                            Log.w("responseEE", "on");
+                            RequestBody body = new FormEncodingBuilder()
+                                    .add("id", id.toString())
+                                    .add("dev", devId.toString())
+                                    .add("value", String.valueOf(glu.read(jar)))
+                                    .add("date", TimestampUtils.getISO8601StringForCurrentDate())
+                                    .build();
+
+                            Request requestNext = new Request.Builder()
+                                    .url("http://192.168.43.253:8080/fetched/glu/add")
+                                    .post(body)
+                                    .build();
+
+                            com.squareup.okhttp.Response devresponse = client.newCall(requestNext).execute();
+                            final String devrep = devresponse.body().string();
+                            Log.w("responseEE", devrep);
+                            ++jar;
+                            if (jar == glu.getDataSize()) break;
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                }
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void voids) {
+            // здесь можете обрабатывать ошибки при работе с сетью
+        }
+    }
 }

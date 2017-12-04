@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,16 +14,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.http.conn.*;
+import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -76,7 +80,7 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme);
+                R.style.Theme_AppCompat);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
@@ -91,24 +95,10 @@ public class SignupActivity extends AppCompatActivity {
         if(!isOnline()) {
             Toast.makeText(getBaseContext(), "Please turn on network", Toast.LENGTH_LONG).show();
             return;
-        } else if(!checkServer()) {
-            Toast.makeText(getBaseContext(), "Server is unavailable", Toast.LENGTH_LONG).show();
-            return;
         } else {
-            value = sendPost(name, country, age, email, password);
+            RetrieveFeedTask rfT = new RetrieveFeedTask(name, age, country, password, email, progressDialog);
+            rfT.execute();
         }
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        if(value) {
-                            onSignupSuccess();
-                        } else {
-                            onSignupFailed();
-                        }
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
 
@@ -195,47 +185,69 @@ public class SignupActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean sendPost(String name, String country, String age, String mail, String pass) {
-        String url = "https://192.168.1.4:8080/user/add";
-        try {
-            URL obj = new URL(url);
-            HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+    class RetrieveFeedTask extends AsyncTask<Void, Void, Void> {
 
-            con.setRequestMethod("POST");
+        public String name, age, country, pass, mail;
+        public ProgressDialog pd;
 
-            StringBuilder urlParameters = new StringBuilder();
-            urlParameters.append("name=").append(name);
-            urlParameters.append("&");
-            urlParameters.append("country=").append(country);
-            urlParameters.append("&");
-            urlParameters.append("age=").append(age);
-            urlParameters.append("&");
-            urlParameters.append("pass=").append(pass);
-            urlParameters.append("&");
-            urlParameters.append("mail=").append(mail);
-
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(urlParameters.toString());
-            wr.flush();
-            wr.close();
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            Log.w("WWR", response.toString());
-            in.close();
-            if(response.indexOf("success") != -1) {
-                return true;
-            }
-        } catch(Exception exe) {
-            exe.printStackTrace();
+        public RetrieveFeedTask(String name, String age, String country, String pass, String mail, ProgressDialog pd) {
+            this.name = name;
+            this.age = age;
+            this.country = country;
+            this.pass = pass;
+            this.mail = mail;
+            this.pd = pd;
         }
-        return false;
+
+        protected Void doInBackground(Void ... voids) {
+            try {
+                JSONObject json = new JSONObject();
+                OkHttpClient client = new OkHttpClient();
+                client.setConnectTimeout(15, TimeUnit.SECONDS);
+                client.setReadTimeout(15, TimeUnit.SECONDS);
+
+                String result = null;
+                try {
+                    /*json.put("id", -1);
+                    json.put("name", name);
+                    json.put("country", country);
+                    json.put("age", Integer.valueOf(age));
+                    json.put("password", pass);
+                    json.put("email", mail);*/
+                    RequestBody body = new FormEncodingBuilder()
+                            .add("name", name)
+                            .add("country", country)
+                            .add("age", age)
+                            .add("pass", pass)
+                            .add("mail", mail)
+                            .build();
+                    //RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                    Request request = new Request.Builder()
+                            .url("http://192.168.43.253:8080/user/add")
+                            .post(body)
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                    result = response.body().string();
+                    //Log.w("responseWW", result);
+                    if(result.indexOf("success") != -1) {
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        onSignupSuccess();
+                                        pd.dismiss();
+                                    }
+                                }, 3000);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {}
+            return null;
+        }
+
+        protected void onPostExecute(Void voids) {
+            // здесь можете обрабатывать ошибки при работе с сетью
+        }
     }
 }
